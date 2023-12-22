@@ -1,5 +1,6 @@
 import {buildStorage} from "axios-cache-interceptor";
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import path from "node:path";
 
 const basex = require("base-x");
@@ -13,10 +14,8 @@ export const decodeFileName = (value: string): string =>
 export const encodeFileName = (value: string): string =>
   base58.encode(Buffer.from(value, "utf-8"));
 
-export default async function buildAxiosCacheFileStorage(
-  directoryPath: string
-) {
-  await fs.mkdir(directoryPath, {recursive: true});
+export default function buildAxiosCacheFileStorage(directoryPath: string) {
+  fsSync.mkdirSync(directoryPath, {recursive: true});
 
   return buildStorage({
     async find(key) {
