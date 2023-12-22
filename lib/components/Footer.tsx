@@ -8,13 +8,15 @@ export default function Footer() {
       }}
     >
       <div className="mx-auto w-full max-w-screen-xl text-center">
-        © 2023 Minor Gordon.
+        © 2023 Minor Gordon
         <br />
         Licensed under the&nbsp;
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">
+        <a
+          className="underline"
+          href="https://creativecommons.org/licenses/by-sa/4.0/"
+        >
           Creative Commons Attribution-ShareAlike License 4.0
         </a>
-        .
       </div>
     </footer>
   );
