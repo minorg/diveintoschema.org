@@ -1,4 +1,3 @@
-import invariant from "ts-invariant";
 import cachingAxios from "./cachingAxios";
 import {
   NodeType,
@@ -10,39 +9,43 @@ import {
 class ClassSpecificSubset {
   readonly className: string;
   readonly downloadHref: string;
-  readonly downloadSampleHref: string;
   readonly generalStats: {
     hosts: number;
     quads: number;
     urls: number;
   };
+  readonly pldStatsHref: string;
   readonly relatedClasses: readonly {count: number; name: string}[];
+  readonly sampleDownloadHref: string;
   readonly size: string;
 
   constructor({
     className,
     downloadHref,
-    downloadSampleHref,
     generalStats,
     relatedClasses,
+    pldStatsHref,
+    sampleDownloadHref,
     size,
   }: {
     className: string;
     downloadHref: string;
-    downloadSampleHref: string;
     generalStats: {
       hosts: number;
       quads: number;
       urls: number;
     };
+    pldStatsHref: string;
     relatedClasses: readonly {count: number; name: string}[];
+    sampleDownloadHref: string;
     size: string;
   }) {
     this.className = className;
     this.downloadHref = downloadHref;
-    this.downloadSampleHref = downloadSampleHref;
     this.generalStats = generalStats;
+    this.pldStatsHref = pldStatsHref;
     this.relatedClasses = relatedClasses;
+    this.sampleDownloadHref = sampleDownloadHref;
     this.size = size;
   }
 }
@@ -81,7 +84,7 @@ export default class WebDataCommonsCorpus {
     this.version = version ?? "2022-12";
   }
 
-  async getClassSpecificSubsets(): Promise<readonly ClassSpecificSubset[]> {
+  async classSpecificSubsets(): Promise<readonly ClassSpecificSubset[]> {
     const metadataHtml = (
       await cachingAxios.get(
         `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
@@ -118,16 +121,20 @@ export default class WebDataCommonsCorpus {
           .getElementsByTagName("a")
           .map((anchorElement) => anchorElement.attributes["href"]);
 
+        const pldStatsHref =
+          tableCells[4].getElementsByTagName("a")[1].attributes["href"];
+
         return new ClassSpecificSubset({
           className: tableRow.getElementsByTagName("th")[0].text,
           downloadHref: downloadHrefs[0],
-          downloadSampleHref: downloadHrefs[1],
           generalStats: {
             hosts: generalStatsHosts,
             quads: generalStatsQuads,
             urls: generalStatsUrls,
           },
+          pldStatsHref,
           relatedClasses,
+          sampleDownloadHref: downloadHrefs[1],
           size: sizeCell.text,
         });
       });
