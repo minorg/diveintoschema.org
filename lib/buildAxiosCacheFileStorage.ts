@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const basex = require("base-x");
 const base58 = basex(
   "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"

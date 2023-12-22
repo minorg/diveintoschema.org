@@ -8,6 +8,7 @@
     "base-x": "^4.0.0",
     "next": "14.0.4",
     "node-html-parser": "^6.1.11",
+    "pino": "^8.17.1",
     "react": "^18",
     "react-dom": "^18",
     "ts-invariant": "^0.10.3"

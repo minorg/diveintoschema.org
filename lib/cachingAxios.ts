@@ -6,6 +6,7 @@ import path from "node:path";
 
 const cachingAxios = Axios.create();
 setupCache(cachingAxios, {
+  debug: console.log,
   storage: buildAxiosCacheFileStorage(path.resolve(dataDirPath, "axios-cache")),
 });
 

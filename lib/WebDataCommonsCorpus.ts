@@ -1,3 +1,4 @@
+import pino from "pino";
 import cachingAxios from "./cachingAxios";
 import {
   NodeType,
@@ -5,6 +6,8 @@ import {
   TextNode,
   parse as parseHtml,
 } from "node-html-parser";
+
+const logger = pino();
 
 class ClassSpecificSubset {
   readonly className: string;
@@ -85,11 +88,14 @@ export default class WebDataCommonsCorpus {
   }
 
   async classSpecificSubsets(): Promise<readonly ClassSpecificSubset[]> {
-    const metadataHtml = (
-      await cachingAxios.get(
-        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
-      )
-    ).data;
+    const metadataHtmlResponse = await cachingAxios.get(
+      `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
+    );
+    if ((metadataHtmlResponse as any).cached) {
+      logger.info("metadata HTML file was cached");
+    }
+
+    const metadataHtml: string = metadataHtmlResponse.data;
 
     return parseHtml(metadataHtml)
       .querySelector("body > div > h2")!
