@@ -1,10 +1,10 @@
 import type {Metadata} from "next";
-import {Inter} from "next/font/google";
+import {DM_Sans} from "next/font/google";
 import "./globals.css";
 import Navbar from "@/lib/components/Navbar";
 import Footer from "@/lib/components/Footer";
 
-const inter = Inter({subsets: ["latin"]});
+const sansSerifFont = DM_Sans({subsets: ["latin"]});
 
 export const metadata: Metadata = {
   title: "Dive into Schema.org",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={sansSerifFont.className}>
         <div className="flex min-h-screen flex-col">
           <Navbar />
           <div className="p-4">{children}</div>
