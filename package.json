@@ -12,6 +12,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/jest": "29.5.11",
     "@types/node": "^18",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -21,10 +22,12 @@
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",
+    "jest": "^29.7.0",
     "postcss": "^8",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "license": "GPL-3.0-only",
@@ -32,6 +35,8 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "test": "TZ=UTC jest",
+    "test:watch": "TZ=UTC jest --watch"
   }
 }
