@@ -5,8 +5,9 @@ import {
   TextNode,
   parse as parseHtml,
 } from "node-html-parser";
-import {MimeFormat, Parser, Store} from "n3";
+import {Parser, Store} from "n3";
 import {DatasetCore} from "@rdfjs/types";
+import Papa from "papaparse";
 
 class ClassSpecificSubset {
   readonly className: string;
@@ -49,6 +50,35 @@ class ClassSpecificSubset {
     this.relatedClasses = relatedClasses;
     this.sampleDownloadHref = sampleDownloadHref;
     this.size = size;
+  }
+
+  async pldStats(): Promise<
+    readonly {
+      domain: string;
+      entitiesOfClass: number;
+      propertiesAndDensity: Record<string, number>;
+      quadsOfSubset: number;
+    }[]
+  > {
+    const pldStatsCsv: string = (await cachingAxios.get(this.pldStatsHref))
+      .data;
+    return Papa.parse(pldStatsCsv, {
+      delimiter: "\t",
+      header: true,
+    }).data.flatMap((row: any) =>
+      row["Domain"].length > 0
+        ? [
+            {
+              domain: row["Domain"],
+              entitiesOfClass: parseInt(row["#Entities of class"]),
+              propertiesAndDensity: row["Properties and Density"]
+                ? JSON.parse(row["Properties and Density"].replaceAll("'", '"'))
+                : {},
+              quadsOfSubset: parseInt(row["#Quads of Subset"]),
+            },
+          ]
+        : []
+    );
   }
 
   async sampleDataset(): Promise<DatasetCore> {

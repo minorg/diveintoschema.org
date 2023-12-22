@@ -21,4 +21,15 @@ describe("WebDataCommonsCorpus", () => {
     const dataset = await classSpecificSubset.sampleDataset();
     expect(dataset.size).toBeGreaterThan(0);
   });
+
+  it("gets a class-specific subset PLD stats", async () => {
+    const classSpecificSubset = (await sut.classSpecificSubsets())[0];
+    const pldStats = await classSpecificSubset.pldStats();
+    expect(pldStats.length).toBeGreaterThan(0);
+    for (const pldStatsRow of pldStats) {
+      expect(pldStatsRow.domain).not.toBe("");
+      expect(pldStatsRow.entitiesOfClass).toBeGreaterThan(0);
+      expect(pldStatsRow.quadsOfSubset).toBeGreaterThan(0);
+    }
+  });
 });
