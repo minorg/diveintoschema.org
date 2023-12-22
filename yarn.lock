@@ -703,6 +703,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rdfjs/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@rdfjs/types/-/types-1.1.0.tgz#098f180b7cccb03bb416c7b4d03baaa9d480e36b"
+  integrity sha512-5zm8bN2/CC634dTcn/0AhTRLaQRjXDZs3QfcAsQKNturHT7XVWcKy/8p3P5gXl+YkZTAmy7T5M/LyiT/jbkENw==
+  dependencies:
+    "@types/node" "*"
+
 "@rushstack/eslint-patch@^1.3.3":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.6.1.tgz#9ab8f811930d7af3e3d549183a50884f9eb83f36"
@@ -830,6 +837,14 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/n3@^1.16.4":
+  version "1.16.4"
+  resolved "https://registry.yarnpkg.com/@types/n3/-/n3-1.16.4.tgz#007f489eb848a6a8ac586b037b8eea281da5730f"
+  integrity sha512-6PmHRYCCdjbbBV2UVC/HjtL6/5Orx9ku2CQjuojucuHvNvPmnm6+02B18YGhHfvU25qmX2jPXyYPHsMNkn+w2w==
+  dependencies:
+    "@rdfjs/types" "^1.1.0"
+    "@types/node" "*"
 
 "@types/node@*":
   version "20.10.5"
@@ -3411,6 +3426,14 @@ mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
+n3@^1.17.2:
+  version "1.17.2"
+  resolved "https://registry.yarnpkg.com/n3/-/n3-1.17.2.tgz#3370b2d07da98a5b2865fa43c2d4e5c563cc65df"
+  integrity sha512-BxSM52wYFqXrbQQT5WUEzKUn6qpYV+2L4XZLfn3Gblz2kwZ09S+QxC33WNdVEQy2djenFL8SNkrjejEKlvI6+Q==
+  dependencies:
+    queue-microtask "^1.1.2"
+    readable-stream "^4.0.0"
+
 nanoid@^3.3.6, nanoid@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
@@ -3858,7 +3881,7 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.4.tgz#50b737f6a925468679bff00ad20eade53f37d5c7"
   integrity sha512-LA0Y9kxMYv47GIPJy6MI84fqTd2HmYZI83W/kM/SkKfDlajnZYfmXFTxkbY+xSBPkLJxltMa9hIkmdc29eguMA==
 
-queue-microtask@^1.2.2:
+queue-microtask@^1.1.2, queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==

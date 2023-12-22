@@ -1,4 +1,3 @@
-import pino from "pino";
 import cachingAxios from "./cachingAxios";
 import {
   NodeType,
@@ -6,20 +5,20 @@ import {
   TextNode,
   parse as parseHtml,
 } from "node-html-parser";
-
-const logger = pino();
+import {MimeFormat, Parser, Store} from "n3";
+import {DatasetCore} from "@rdfjs/types";
 
 class ClassSpecificSubset {
   readonly className: string;
-  readonly downloadHref: string;
+  private readonly downloadHref: string;
   readonly generalStats: {
     hosts: number;
     quads: number;
     urls: number;
   };
-  readonly pldStatsHref: string;
+  private readonly pldStatsHref: string;
   readonly relatedClasses: readonly {count: number; name: string}[];
-  readonly sampleDownloadHref: string;
+  private readonly sampleDownloadHref: string;
   readonly size: string;
 
   constructor({
@@ -50,6 +49,16 @@ class ClassSpecificSubset {
     this.relatedClasses = relatedClasses;
     this.sampleDownloadHref = sampleDownloadHref;
     this.size = size;
+  }
+
+  async sampleDataset(): Promise<DatasetCore> {
+    const sampleNquadsString: string = (
+      await cachingAxios.get(this.sampleDownloadHref)
+    ).data;
+    const store = new Store();
+    const parser = new Parser({format: "N-Quads"});
+    store.addQuads(parser.parse(sampleNquadsString));
+    return store;
   }
 }
 
@@ -88,14 +97,11 @@ export default class WebDataCommonsCorpus {
   }
 
   async classSpecificSubsets(): Promise<readonly ClassSpecificSubset[]> {
-    const metadataHtmlResponse = await cachingAxios.get(
-      `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
-    );
-    if ((metadataHtmlResponse as any).cached) {
-      logger.info("metadata HTML file was cached");
-    }
-
-    const metadataHtml: string = metadataHtmlResponse.data;
+    const metadataHtml: string = (
+      await cachingAxios.get(
+        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
+      )
+    ).data;
 
     return parseHtml(metadataHtml)
       .querySelector("body > div > h2")!
