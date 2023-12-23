@@ -6,6 +6,7 @@ import {
   parse as parseHtml,
 } from "node-html-parser";
 import WebDataCommonsCorpusClassSpecificSubset from "./WebDataCommonsCorpusClassSpecificSubset";
+import {Memoize} from "typescript-memoize";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -41,6 +42,7 @@ export default class WebDataCommonsCorpus {
     this.version = version ?? "2022-12";
   }
 
+  @Memoize()
   async classSpecificSubsets(): Promise<
     readonly WebDataCommonsCorpusClassSpecificSubset[]
   > {

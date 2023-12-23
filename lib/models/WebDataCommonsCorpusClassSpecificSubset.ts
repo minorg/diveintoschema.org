@@ -3,6 +3,7 @@ import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
 import cachingAxios from "../cachingAxios";
 import WebDataCommonsPayLevelDomain from "./WebDataCommonsPayLevelDomain";
+import {Memoize} from "typescript-memoize";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
   readonly className: string;
@@ -47,6 +48,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     this.size = size;
   }
 
+  @Memoize()
   async pldStats(): Promise<
     readonly {
       domain: WebDataCommonsPayLevelDomain;
