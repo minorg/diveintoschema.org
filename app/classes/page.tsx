@@ -7,6 +7,8 @@ export default async function ClassesPage() {
       classes={(await webDataCommonsCorpus.classSpecificSubsets()).map(
         (classSpecificSubset) => ({
           name: classSpecificSubset.className,
+          relatedClasses: classSpecificSubset.relatedClasses,
+          stats: classSpecificSubset.generalStats,
         })
       )}
     />

@@ -38,16 +38,13 @@ export default function Table<RowT>({
   });
 
   return (
-    <div className="flex flex-col max-w-3xl mx-auto py-24">
+    <div className="flex flex-col">
       <table className="border">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="border-b text-gray-800">
+            <tr key={headerGroup.id} className="border-b text-gray-800 text-lg">
               {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="px-4 pr-2 py-4 font-medium text-left"
-                >
+                <th key={header.id} className="p-4 font-medium text-left">
                   {header.isPlaceholder ? null : (
                     <div
                       {...{
@@ -74,9 +71,12 @@ export default function Table<RowT>({
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="border-b">
+            <tr key={row.id} className="border-b  even:bg-gray-50 odd:bg-white">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 pt-[14px] pb-[18px]">
+                <td
+                  key={cell.id}
+                  className="px-4 pt-[14px] pb-[18px] text-gray-600"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
