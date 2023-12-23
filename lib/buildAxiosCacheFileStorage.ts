@@ -24,7 +24,9 @@ export default function buildAxiosCacheFileStorage(directoryPath: string) {
       const filePath = path.resolve(directoryPath, encodeFileName(key));
       try {
         await fs.unlink(filePath);
-      } catch {}
+      } catch {
+        return;
+      }
     },
 
     async set(key, value) {
