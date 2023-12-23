@@ -1,9 +1,9 @@
 import webDataCommonsCorpus from "../webDataCommonsCorpus";
-import ClassesDataGrid from "@/lib/components/ClassesDataGrid";
+import ClassesTable from "@/lib/components/ClassesTable";
 
 export default async function ClassesPage() {
   return (
-    <ClassesDataGrid
+    <ClassesTable
       classes={(await webDataCommonsCorpus.classSpecificSubsets()).map(
         (classSpecificSubset) => ({
           name: classSpecificSubset.className,

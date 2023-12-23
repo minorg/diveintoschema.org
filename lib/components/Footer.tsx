@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer
-      className="flex items-center mt-auto p-4"
+      className="flex items-center p-4"
       style={{
         background: "var(--foreground-color)",
         color: "var(--background-color)",

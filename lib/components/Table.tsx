@@ -1,5 +1,6 @@
+"use client";
+
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -14,7 +15,7 @@ export default function Table<RowT>({
   columns,
   rows: rowsProp,
 }: {
-  columns: ColumnDef<RowT>[];
+  columns: ColumnDef<RowT, any>[];
   rows: RowT[];
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -24,27 +25,24 @@ export default function Table<RowT>({
     data: rowsProp,
     initialState: {
       pagination: {
-        pageSize: 2,
+        pageSize: 50,
       },
     },
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     state: {
       sorting,
     },
   });
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto py-24">
+    <div className="flex flex-col max-w-3xl mx-auto py-24">
       <table className="border">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className="border-b text-gray-800 uppercase"
-            >
+            <tr key={headerGroup.id} className="border-b text-gray-800">
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
@@ -89,15 +87,15 @@ export default function Table<RowT>({
 
       <div className="flex sm:flex-row flex-col w-full mt-8 items-center gap-2 text-xs">
         <div className="sm:mr-auto sm:mb-0 mb-2">
-          <span className="mr-2">Items por página</span>
+          <span className="mr-2">Rows per page</span>
           <select
-            className="border p-1 rounded w-16 border-gray-200"
+            className="border p-1 rounded w-16 border-gray-200 text-center"
             value={table.getState().pagination.pageSize}
             onChange={(e) => {
               table.setPageSize(Number(e.target.value));
             }}
           >
-            {[2, 4, 6, 8].map((pageSize) => (
+            {[5, 10, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>
@@ -139,7 +137,7 @@ export default function Table<RowT>({
               }}
               className="border p-1 rounded w-10"
             />
-            de {table.getPageCount()}
+            of {table.getPageCount()}
           </span>
           <button
             className={`${
