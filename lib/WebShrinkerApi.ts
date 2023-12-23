@@ -1,7 +1,6 @@
 import {Array, Record, String} from "runtypes";
 import WebShrinkerCategory from "./models/WebShrinkerCategory";
 import cachingAxios from "./cachingAxios";
-import {encode} from "url-safe-base64";
 
 const LookupCategoriesDataResponse = Record({
   data: Array(
