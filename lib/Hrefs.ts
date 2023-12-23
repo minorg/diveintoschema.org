@@ -3,7 +3,7 @@ export default class Hrefs {
     return "/classes/";
   }
 
-  static class_({className}: {className: string}) {
-    return Hrefs.classes + className;
+  static class_({name}: {name: string}) {
+    return Hrefs.classes + name;
   }
 }
