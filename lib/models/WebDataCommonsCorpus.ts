@@ -1,96 +1,11 @@
-import cachingAxios from "./cachingAxios";
+import cachingAxios from "../cachingAxios";
 import {
   NodeType,
   HTMLElement,
   TextNode,
   parse as parseHtml,
 } from "node-html-parser";
-import {Parser, Store} from "n3";
-import {DatasetCore} from "@rdfjs/types";
-import Papa from "papaparse";
-
-class ClassSpecificSubset {
-  readonly className: string;
-  private readonly downloadHref: string;
-  readonly generalStats: {
-    hosts: number;
-    quads: number;
-    urls: number;
-  };
-  private readonly pldStatsHref: string;
-  readonly relatedClasses: readonly {count: number; name: string}[];
-  private readonly sampleDownloadHref: string;
-  readonly size: string;
-
-  constructor({
-    className,
-    downloadHref,
-    generalStats,
-    relatedClasses,
-    pldStatsHref,
-    sampleDownloadHref,
-    size,
-  }: {
-    className: string;
-    downloadHref: string;
-    generalStats: {
-      hosts: number;
-      quads: number;
-      urls: number;
-    };
-    pldStatsHref: string;
-    relatedClasses: readonly {count: number; name: string}[];
-    sampleDownloadHref: string;
-    size: string;
-  }) {
-    this.className = className;
-    this.downloadHref = downloadHref;
-    this.generalStats = generalStats;
-    this.pldStatsHref = pldStatsHref;
-    this.relatedClasses = relatedClasses;
-    this.sampleDownloadHref = sampleDownloadHref;
-    this.size = size;
-  }
-
-  async pldStats(): Promise<
-    readonly {
-      domain: string;
-      entitiesOfClass: number;
-      propertiesAndDensity: Record<string, number>;
-      quadsOfSubset: number;
-    }[]
-  > {
-    const pldStatsCsv: string = (await cachingAxios.get(this.pldStatsHref))
-      .data;
-    return Papa.parse(pldStatsCsv, {
-      delimiter: "\t",
-      header: true,
-    }).data.flatMap((row: any) =>
-      row["Domain"].length > 0
-        ? [
-            {
-              domain: row["Domain"],
-              entitiesOfClass: parseInt(row["#Entities of class"]),
-              propertiesAndDensity: row["Properties and Density"]
-                ? JSON.parse(row["Properties and Density"].replaceAll("'", '"'))
-                : {},
-              quadsOfSubset: parseInt(row["#Quads of Subset"]),
-            },
-          ]
-        : []
-    );
-  }
-
-  async sampleDataset(): Promise<DatasetCore> {
-    const sampleNquadsString: string = (
-      await cachingAxios.get(this.sampleDownloadHref)
-    ).data;
-    const store = new Store();
-    const parser = new Parser({format: "N-Quads"});
-    store.addQuads(parser.parse(sampleNquadsString));
-    return store;
-  }
-}
+import WebDataCommonsCorpusClassSpecificSubset from "./WebDataCommonsCorpusClassSpecificSubset";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -126,7 +41,9 @@ export default class WebDataCommonsCorpus {
     this.version = version ?? "2022-12";
   }
 
-  async classSpecificSubsets(): Promise<readonly ClassSpecificSubset[]> {
+  async classSpecificSubsets(): Promise<
+    readonly WebDataCommonsCorpusClassSpecificSubset[]
+  > {
     const metadataHtml: string = (
       await cachingAxios.get(
         `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
@@ -166,7 +83,7 @@ export default class WebDataCommonsCorpus {
         const pldStatsHref =
           tableCells[4].getElementsByTagName("a")[1].attributes["href"];
 
-        return new ClassSpecificSubset({
+        return new WebDataCommonsCorpusClassSpecificSubset({
           className: tableRow.getElementsByTagName("th")[0].text,
           downloadHref: downloadHrefs[0],
           generalStats: {
