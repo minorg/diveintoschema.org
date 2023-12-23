@@ -55,8 +55,13 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
       quadsOfSubset: number;
     }[]
   > {
-    const pldStatsCsv: string = (await cachingAxios.get(this.pldStatsHref))
-      .data;
+    const pldStatsCsv: string = (
+      await cachingAxios.get(this.pldStatsHref, {
+        cache: {
+          ttl: 31556952000, // 1 year
+        },
+      })
+    ).data;
     return Papa.parse(pldStatsCsv, {
       delimiter: "\t",
       header: true,
@@ -78,7 +83,11 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
 
   async sampleDataset(): Promise<DatasetCore> {
     const sampleNquadsString: string = (
-      await cachingAxios.get(this.sampleDownloadHref)
+      await cachingAxios.get(this.sampleDownloadHref, {
+        cache: {
+          ttl: 31556952000, // 1 year
+        },
+      })
     ).data;
     const store = new Store();
     const parser = new Parser({format: "N-Quads"});

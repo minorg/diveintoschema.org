@@ -46,7 +46,12 @@ export default class WebDataCommonsCorpus {
   > {
     const metadataHtml: string = (
       await cachingAxios.get(
-        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
+        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`,
+        {
+          cache: {
+            ttl: 31556952000, // 1 year
+          },
+        }
       )
     ).data;
 
