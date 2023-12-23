@@ -1,4 +1,5 @@
 import {PuzzlePieceIcon} from "@heroicons/react/24/solid";
+import Hrefs from "@/lib/Hrefs";
 
 export default function Navbar() {
   return (
@@ -16,8 +17,8 @@ export default function Navbar() {
         </a>
       </div>
       <div className="flex-grow text-xl">
-        <a href="/candidates" className="blocklg:inline-block">
-          Other Page
+        <a href={Hrefs.classes} className="blocklg:inline-block">
+          Classes
         </a>
       </div>
     </nav>
