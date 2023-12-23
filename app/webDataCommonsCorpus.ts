@@ -5,4 +5,4 @@ const webDataCommonsCorpus = new GlobalRef("webDataCommonsCorpus");
 if (!webDataCommonsCorpus.value) {
   webDataCommonsCorpus.value = new WebDataCommonsCorpus({});
 }
-export default webDataCommonsCorpus.value;
+export default webDataCommonsCorpus.value as WebDataCommonsCorpus;
