@@ -1,6 +1,7 @@
 import {Array, Record, String} from "runtypes";
 import WebShrinkerCategory from "./models/WebShrinkerCategory";
 import cachingAxios from "./cachingAxios";
+import {encode} from "url-safe-base64";
 
 const LookupCategoriesDataResponse = Record({
   data: Array(
@@ -37,7 +38,8 @@ export default class WebShrinkerApi {
   async lookupCategories(url: string): Promise<readonly WebShrinkerCategory[]> {
     const response = await cachingAxios.get(
       "https://api.webshrinker.com/categories/v3/" +
-        Buffer.from(url).toString("base64url"),
+        Buffer.from(url).toString("base64"),
+      // encode(url),
       {
         auth: {
           username: this.accessKey,
