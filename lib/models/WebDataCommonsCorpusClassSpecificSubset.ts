@@ -2,7 +2,7 @@ import {Parser, Store} from "n3";
 import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
 import cachingAxios from "../cachingAxios";
-import {WebDataCommonsPayLevelDomain} from "./WebDataCommonsPayLevelDomain";
+import WebDataCommonsPayLevelDomain from "./WebDataCommonsPayLevelDomain";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
   readonly className: string;
