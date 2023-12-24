@@ -11,6 +11,8 @@ import buildAxiosCacheFileStorage from "@/lib/buildAxiosCacheFileStorage";
 import {AxiosCacheInstance, setupCache} from "axios-cache-interceptor";
 import path from "node:path";
 import {dataDirPath} from "@/lib/paths";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as rax from "retry-axios";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -50,7 +52,14 @@ export default class WebDataCommonsCorpus {
         path.resolve(dataDirPath, "webdatacommons", "axios-cache")
       ),
     });
-
+    this.axios.defaults.raxConfig = {
+      instance: this.axios,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)!;
+        console.warn(`retry attempt #${cfg.currentRetryAttempt}`);
+      },
+    };
+    rax.attach(this.axios);
     this.version = version ?? "2022-12";
   }
 

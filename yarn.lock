@@ -4051,6 +4051,11 @@ resolve@^2.0.0-next.4:
     path-parse "^1.0.7"
     supports-preserve-symlinks-flag "^1.0.0"
 
+retry-axios@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/retry-axios/-/retry-axios-3.1.3.tgz#c263313e5148e8747b13d4861e3f8316f49088ed"
+  integrity sha512-uwnlAjqg6twTcQB7RvH3OSgAqjqBDS9GFUOT+BhgADDYjoxsB7KfvS6SqYHOPjxM/Z/jVwSwGYdJnPE8at1PoA==
+
 reusify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"

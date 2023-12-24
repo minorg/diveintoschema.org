@@ -22,4 +22,12 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
       expect(pldStatsRow.quadsOfSubset).toBeGreaterThan(0);
     }
   });
+
+  it("get all PLD stats in parallel", async () => {
+    await Promise.all(
+      (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
+        (classSpecificSubset) => classSpecificSubset.pldStats
+      )
+    );
+  });
 });
