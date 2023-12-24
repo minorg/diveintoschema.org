@@ -6,6 +6,7 @@
     "@rdfjs/types": "^1.1.0",
     "@tanstack/react-table": "^8.11.2",
     "base-x": "^4.0.0",
+    "got": "^14.0.0",
     "json-stringify-deterministic": "^1.0.12",
     "n3": "^1.17.2",
     "next": "14.0.4",
