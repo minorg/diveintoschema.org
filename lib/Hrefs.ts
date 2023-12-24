@@ -1,9 +1,9 @@
 export default class Hrefs {
-  static get classes() {
-    return "/classes/";
+  static type({name}: {name: string}) {
+    return Hrefs.types + name;
   }
 
-  static class_({name}: {name: string}) {
-    return Hrefs.classes + name;
+  static get types() {
+    return "/types/";
   }
 }

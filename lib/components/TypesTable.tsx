@@ -6,25 +6,25 @@ import WebDataCommonsRelatedClass from "../models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 
-interface Class {
+interface Type {
   name: string;
   generalStats: WebDataCommonsClassGeneralStats;
-  relatedClasses: readonly WebDataCommonsRelatedClass[];
+  relatedTypes: readonly WebDataCommonsRelatedClass[];
 }
 
-const columnHelper = createColumnHelper<Class>();
+const columnHelper = createColumnHelper<Type>();
 
-const columns: ColumnDef<Class, any>[] = [
+const columns: ColumnDef<Type, any>[] = [
   columnHelper.accessor("name", {
     cell: (context) => (
       <a
         className="underline"
-        href={Hrefs.class_({name: context.cell.getValue()})}
+        href={Hrefs.type({name: context.cell.getValue()})}
       >
         {context.cell.getValue()}
       </a>
     ),
-    header: () => "Class",
+    header: () => "Type",
   }),
   columnHelper.accessor("generalStats.hosts", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
@@ -34,37 +34,37 @@ const columns: ColumnDef<Class, any>[] = [
     cell: (context) => (context.getValue() as number).toLocaleString(),
     header: () => "Found on unique URLs",
   }),
-  columnHelper.accessor("relatedClasses", {
+  columnHelper.accessor("relatedTypes", {
     cell: (context) => (
       <table className="w-100">
         <thead>
           <tr>
-            <th className="font-bold">Class</th>
+            <th className="font-bold">Type</th>
             <th className="font-bold">Count</th>
           </tr>
         </thead>
         <tbody>
           {(context.getValue() as WebDataCommonsRelatedClass[])
             .sort((left, right) => (left.count - right.count) * -1)
-            .map((relatedClass) => (
-              <tr key={relatedClass.name}>
+            .map((relatedType) => (
+              <tr key={relatedType.name}>
                 <td className="pr-4">
-                  <a className="underline" href={Hrefs.class_(relatedClass)}>
-                    {relatedClass.name}
+                  <a className="underline" href={Hrefs.type(relatedType)}>
+                    {relatedType.name}
                   </a>
                 </td>
-                <td>{relatedClass.count.toLocaleString()}</td>
+                <td>{relatedType.count.toLocaleString()}</td>
               </tr>
             ))}
         </tbody>
       </table>
     ),
     enableSorting: false,
-    id: "relatedClasses",
-    header: () => "Related classes",
+    id: "relatedTypes",
+    header: () => "Related types",
   }),
 ];
 
-export default function ClassesTable({classes}: {classes: Class[]}) {
-  return <Table columns={columns} rows={classes} />;
+export default function TypesTable({types}: {types: Type[]}) {
+  return <Table columns={columns} rows={types} />;
 }

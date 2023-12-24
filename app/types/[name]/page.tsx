@@ -1,23 +1,23 @@
 import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
 
-interface ClassPageParams {
-  className: string;
+interface TypePageParams {
+  name: string;
 }
 
-export default async function ClassPage({
-  params: {className},
+export default async function TypePage({
+  params: {name},
 }: {
-  params: ClassPageParams;
+  params: TypePageParams;
 }) {
   const classSpecificSubset = (
     await webDataCommonsCorpus.classSpecificSubsetsByClassName()
-  )[className];
+  )[name];
 }
 
-export async function generateStaticParams(): Promise<ClassPageParams[]> {
+export async function generateStaticParams(): Promise<TypePageParams[]> {
   return (await webDataCommonsCorpus.classSpecificSubsets()).map(
     (classSpecificSubset) => ({
-      className: classSpecificSubset.className,
+      name: classSpecificSubset.className,
     })
   );
 }

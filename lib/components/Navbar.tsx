@@ -17,8 +17,8 @@ export default function Navbar() {
         </a>
       </div>
       <div className="flex-grow text-xl">
-        <a href={Hrefs.classes} className="blocklg:inline-block">
-          Classes
+        <a href={Hrefs.types} className="blocklg:inline-block">
+          Types
         </a>
       </div>
     </nav>
