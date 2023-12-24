@@ -1,22 +1,15 @@
 "use client";
 
 import Hrefs from "../Hrefs";
+import WebDataCommonsClassStats from "../models/WebDataCommonsClassStats";
+import WebDataCommonsRelatedClass from "../models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 
-interface RelatedClass {
-  count: number;
-  name: string;
-}
-
 interface Class {
   name: string;
-  relatedClasses: readonly RelatedClass[];
-  stats: {
-    hosts: number;
-    quads: number;
-    urls: number;
-  };
+  relatedClasses: readonly WebDataCommonsRelatedClass[];
+  stats: WebDataCommonsClassStats;
 }
 
 const columnHelper = createColumnHelper<Class>();

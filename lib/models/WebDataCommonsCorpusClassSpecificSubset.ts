@@ -4,18 +4,16 @@ import Papa from "papaparse";
 import WebDataCommonsPayLevelDomain from "./WebDataCommonsPayLevelDomain";
 import {Memoize} from "typescript-memoize";
 import {AxiosCacheInstance} from "axios-cache-interceptor";
+import WebDataCommonsClassStats from "./WebDataCommonsClassStats";
+import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
   private readonly axios: AxiosCacheInstance;
   readonly className: string;
   private readonly downloadHref: string;
-  readonly generalStats: {
-    hosts: number;
-    quads: number;
-    urls: number;
-  };
+  readonly generalStats: WebDataCommonsClassStats;
   private readonly pldStatsHref: string;
-  readonly relatedClasses: readonly {count: number; name: string}[];
+  readonly relatedClasses: readonly WebDataCommonsRelatedClass[];
   private readonly sampleDownloadHref: string;
   readonly size: string;
 
