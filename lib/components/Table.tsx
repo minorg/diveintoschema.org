@@ -8,25 +8,45 @@ import {
   SortingState,
   getPaginationRowModel,
   ColumnDef,
+  TableOptions,
 } from "@tanstack/react-table";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function Table<RowT>({
   columns,
   rows: rowsProp,
+  ...otherProps
 }: {
   columns: ColumnDef<RowT, any>[];
   rows: RowT[];
-}) {
+} & Omit<
+  TableOptions<RowT>,
+  | "columns"
+  | "data"
+  | "getCoreRowModel"
+  | "getPaginationRowModel"
+  | "getSortedRowModel"
+  | "onSortingChange"
+  | "state"
+>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  useEffect(() => {
+    if (otherProps.initialState?.sorting) {
+      setSorting(otherProps.initialState.sorting);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const table = useReactTable({
+    ...otherProps,
     columns,
     data: rowsProp,
     initialState: {
       pagination: {
-        pageSize: 50,
+        pageSize: 10,
       },
+      ...otherProps.initialState,
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -42,7 +62,7 @@ export default function Table<RowT>({
       <table className="border">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="border-b text-gray-800 text-lg">
+            <tr key={headerGroup.id} className="border-b text-gray-800">
               {headerGroup.headers.map((header) => (
                 <th key={header.id} className="p-4 font-medium text-left">
                   {header.isPlaceholder ? null : (

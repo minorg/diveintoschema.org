@@ -1,8 +1,8 @@
 "use client";
 
-import Hrefs from "../Hrefs";
-import WebDataCommonsClassGeneralStats from "../models/WebDataCommonsClassGeneralStats";
-import WebDataCommonsRelatedClass from "../models/WebDataCommonsRelatedClass";
+import Hrefs from "@/lib/Hrefs";
+import WebDataCommonsClassGeneralStats from "@/lib/models/WebDataCommonsClassGeneralStats";
+import WebDataCommonsRelatedClass from "@/lib/models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 
@@ -65,6 +65,6 @@ const columns: ColumnDef<Type, any>[] = [
   }),
 ];
 
-export default function TypesTable({types}: {types: Type[]}) {
-  return <Table columns={columns} rows={types} />;
+export default function TypesTable({rows}: {rows: Type[]}) {
+  return <Table columns={columns} rows={rows} />;
 }
