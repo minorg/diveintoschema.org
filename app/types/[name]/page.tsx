@@ -31,7 +31,7 @@ export default async function TypePage({
         </div>
       </div>
       <div>
-        <div className="font-bold">Domains</div>
+        <div className="font-bold">Domain statistics</div>
         <div className="ml-2 mt-2">
           <TypeDomainsTable
             rows={pldStats.map((pldStatsRow) => ({

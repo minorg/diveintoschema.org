@@ -1,16 +1,12 @@
 "use client";
 
-import Hrefs from "@/lib/Hrefs";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import WebDataCommonsClassPayLevelDomainStats from "../models/WebDataCommonsClassPayLevelDomainStats";
 
 interface TypeDomain {
   domain: string;
-  stats: Omit<
-    WebDataCommonsClassPayLevelDomainStats,
-    "domain" | "propertiesAndDensity"
-  >;
+  stats: Omit<WebDataCommonsClassPayLevelDomainStats, "domain">;
 }
 
 const columnHelper = createColumnHelper<TypeDomain>();
@@ -28,6 +24,45 @@ const staticColumns: ColumnDef<TypeDomain, any>[] = [
     cell: (context) => (context.getValue() as number).toLocaleString(),
     id: "stats.quadsOfSubset",
     header: () => "Found unique quads",
+  }),
+  columnHelper.accessor("stats.propertiesAndDensity", {
+    cell: (context) => {
+      const propertiesAndDensityMap: Record<string, number> =
+        context.getValue();
+
+      const propertiesAndDensityArray = Object.keys(propertiesAndDensityMap)
+        .reduce(
+          (array, property) => {
+            array.push({property, density: propertiesAndDensityMap[property]});
+            return array;
+          },
+          [] as {property: string; density: number}[]
+        )
+        .sort((left, right) => (left.density - right.density) * -1);
+
+      return (
+        <table className="w-100">
+          <tbody>
+            {propertiesAndDensityArray.map(({property, density}) => (
+              <tr key={property}>
+                <td className="pr-4">
+                  <a
+                    className="underline"
+                    href={`https://schema.org/` + property}
+                  >
+                    {property}
+                  </a>
+                </td>
+                <td>{density.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    },
+    enableSorting: false,
+    id: "properties",
+    header: () => "Properties | Density",
   }),
 ];
 
