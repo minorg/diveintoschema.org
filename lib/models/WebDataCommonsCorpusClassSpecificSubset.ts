@@ -1,11 +1,12 @@
 import {Parser, Store} from "n3";
 import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
-import cachingAxios from "../cachingAxios";
 import WebDataCommonsPayLevelDomain from "./WebDataCommonsPayLevelDomain";
 import {Memoize} from "typescript-memoize";
+import {AxiosCacheInstance} from "axios-cache-interceptor";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
+  private readonly axios: AxiosCacheInstance;
   readonly className: string;
   private readonly downloadHref: string;
   readonly generalStats: {
@@ -19,6 +20,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   readonly size: string;
 
   constructor({
+    axios,
     className,
     downloadHref,
     generalStats,
@@ -27,6 +29,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     sampleDownloadHref,
     size,
   }: {
+    axios: AxiosCacheInstance;
     className: string;
     downloadHref: string;
     generalStats: {
@@ -39,6 +42,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     sampleDownloadHref: string;
     size: string;
   }) {
+    this.axios = axios;
     this.className = className;
     this.downloadHref = downloadHref;
     this.generalStats = generalStats;
@@ -58,7 +62,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     }[]
   > {
     const pldStatsCsv: string = (
-      await cachingAxios.get(this.pldStatsHref, {
+      await this.axios.get(this.pldStatsHref, {
         cache: {
           ttl: 31556952000, // 1 year
         },
@@ -85,7 +89,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
 
   async sampleDataset(): Promise<DatasetCore> {
     const sampleNquadsString: string = (
-      await cachingAxios.get(this.sampleDownloadHref, {
+      await this.axios.get(this.sampleDownloadHref, {
         cache: {
           ttl: 31556952000, // 1 year
         },

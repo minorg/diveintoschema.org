@@ -1,4 +1,3 @@
-import cachingAxios from "../cachingAxios";
 import {
   NodeType,
   HTMLElement,
@@ -7,6 +6,11 @@ import {
 } from "node-html-parser";
 import WebDataCommonsCorpusClassSpecificSubset from "./WebDataCommonsCorpusClassSpecificSubset";
 import {Memoize} from "typescript-memoize";
+import Axios from "axios";
+import buildAxiosCacheFileStorage from "@/lib/buildAxiosCacheFileStorage";
+import {AxiosCacheInstance, setupCache} from "axios-cache-interceptor";
+import path from "node:path";
+import {dataDirPath} from "@/lib/paths";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -36,9 +40,17 @@ const parseRelatedClassTextNode = (textNode: TextNode) => {
 };
 
 export default class WebDataCommonsCorpus {
+  private readonly axios: AxiosCacheInstance;
   readonly version: string;
 
   constructor({version}: {version?: string}) {
+    this.axios = setupCache(Axios.create(), {
+      debug: console.log,
+      storage: buildAxiosCacheFileStorage(
+        path.resolve(dataDirPath, "webdatacommons", "axios-cache")
+      ),
+    });
+
     this.version = version ?? "2022-12";
   }
 
@@ -47,7 +59,7 @@ export default class WebDataCommonsCorpus {
     readonly WebDataCommonsCorpusClassSpecificSubset[]
   > {
     const metadataHtml: string = (
-      await cachingAxios.get(
+      await this.axios.get(
         `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`,
         {
           cache: {
@@ -91,6 +103,7 @@ export default class WebDataCommonsCorpus {
           tableCells[4].getElementsByTagName("a")[1].attributes["href"];
 
         return new WebDataCommonsCorpusClassSpecificSubset({
+          axios: this.axios,
           className: tableRow.getElementsByTagName("th")[0].text,
           downloadHref: downloadHrefs[0],
           generalStats: {

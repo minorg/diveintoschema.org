@@ -1,6 +1,10 @@
 import {Array, Record, String} from "runtypes";
 import WebShrinkerCategory from "./models/WebShrinkerCategory";
-import cachingAxios from "./cachingAxios";
+import Axios from "axios";
+import buildAxiosCacheFileStorage from "@/lib/buildAxiosCacheFileStorage";
+import {AxiosCacheInstance, setupCache} from "axios-cache-interceptor";
+import path from "node:path";
+import {dataDirPath} from "@/lib/paths";
 
 const LookupCategoriesDataResponse = Record({
   data: Array(
@@ -19,6 +23,7 @@ const ErrorResponse = Record({
 
 export default class WebShrinkerApi {
   private readonly accessKey: string;
+  private readonly axios: AxiosCacheInstance;
   private readonly secretKey: string;
 
   constructor() {
@@ -32,10 +37,17 @@ export default class WebShrinkerApi {
 
     this.accessKey = requiredEnvironmentVariable("WEBSHRINKER_API_ACCESS_KEY");
     this.secretKey = requiredEnvironmentVariable("WEBSHRINKER_API_SECRET_KEY");
+
+    this.axios = setupCache(Axios.create(), {
+      debug: console.log,
+      storage: buildAxiosCacheFileStorage(
+        path.resolve(dataDirPath, "webshrinker", "axios-cache")
+      ),
+    });
   }
 
   async lookupCategories(url: string): Promise<readonly WebShrinkerCategory[]> {
-    const response = await cachingAxios.get(
+    const response = await this.axios.get(
       "https://api.webshrinker.com/categories/v3/" +
         Buffer.from(url).toString("base64"),
       // encode(url),
