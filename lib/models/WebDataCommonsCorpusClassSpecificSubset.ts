@@ -1,17 +1,17 @@
 import {Parser, Store} from "n3";
 import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
-import WebDataCommonsPayLevelDomain from "./WebDataCommonsPayLevelDomain";
 import {Memoize} from "typescript-memoize";
 import {AxiosCacheInstance} from "axios-cache-interceptor";
-import WebDataCommonsClassStats from "./WebDataCommonsClassStats";
+import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
+import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
   private readonly axios: AxiosCacheInstance;
   readonly className: string;
   private readonly downloadHref: string;
-  readonly generalStats: WebDataCommonsClassStats;
+  readonly generalStats: WebDataCommonsClassGeneralStats;
   private readonly pldStatsHref: string;
   readonly relatedClasses: readonly WebDataCommonsRelatedClass[];
   private readonly sampleDownloadHref: string;
@@ -51,14 +51,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   }
 
   @Memoize()
-  async pldStats(): Promise<
-    readonly {
-      domain: WebDataCommonsPayLevelDomain;
-      entitiesOfClass: number;
-      propertiesAndDensity: Record<string, number>;
-      quadsOfSubset: number;
-    }[]
-  > {
+  async pldStats(): Promise<readonly WebDataCommonsClassPayLevelDomainStats[]> {
     const pldStatsCsv: string = (
       await this.axios.get(this.pldStatsHref, {
         cache: {
@@ -73,7 +66,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
       row["Domain"].length > 0
         ? [
             {
-              domain: new WebDataCommonsPayLevelDomain(row["Domain"] as string),
+              domain: row["Domain"] as string,
               entitiesOfClass: parseInt(row["#Entities of class"]),
               propertiesAndDensity: row["Properties and Density"]
                 ? JSON.parse(row["Properties and Density"].replaceAll("'", '"'))

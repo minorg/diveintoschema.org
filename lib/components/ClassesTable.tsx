@@ -1,15 +1,15 @@
 "use client";
 
 import Hrefs from "../Hrefs";
-import WebDataCommonsClassStats from "../models/WebDataCommonsClassStats";
+import WebDataCommonsClassGeneralStats from "../models/WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "../models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 
 interface Class {
   name: string;
+  generalStats: WebDataCommonsClassGeneralStats;
   relatedClasses: readonly WebDataCommonsRelatedClass[];
-  stats: WebDataCommonsClassStats;
 }
 
 const columnHelper = createColumnHelper<Class>();
@@ -26,11 +26,11 @@ const columns: ColumnDef<Class, any>[] = [
     ),
     header: () => "Class",
   }),
-  columnHelper.accessor("stats.hosts", {
+  columnHelper.accessor("generalStats.hosts", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
     header: () => "Found on unique hosts",
   }),
-  columnHelper.accessor("stats.urls", {
+  columnHelper.accessor("generalStats.urls", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
     header: () => "Found on unique URLs",
   }),
