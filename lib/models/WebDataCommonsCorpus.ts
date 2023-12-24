@@ -118,4 +118,17 @@ export default class WebDataCommonsCorpus {
         });
       });
   }
+
+  @Memoize()
+  async classSpecificSubsetsByClassName(): Promise<
+    Record<string, WebDataCommonsCorpusClassSpecificSubset>
+  > {
+    return (await this.classSpecificSubsets()).reduce(
+      (map, classSpecificSubset) => {
+        map[classSpecificSubset.className] = classSpecificSubset;
+        return map;
+      },
+      {} as Record<string, WebDataCommonsCorpusClassSpecificSubset>
+    );
+  }
 }

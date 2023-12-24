@@ -44,7 +44,7 @@ const columns: ColumnDef<Class, any>[] = [
           </tr>
         </thead>
         <tbody>
-          {(context.getValue() as RelatedClass[])
+          {(context.getValue() as WebDataCommonsRelatedClass[])
             .sort((left, right) => (left.count - right.count) * -1)
             .map((relatedClass) => (
               <tr key={relatedClass.name}>
