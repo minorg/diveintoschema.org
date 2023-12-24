@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/jest": "29.5.11",
     "@types/n3": "^1.16.4",
-    "@types/node": "^18",
+    "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
