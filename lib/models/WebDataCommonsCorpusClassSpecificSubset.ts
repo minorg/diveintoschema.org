@@ -7,6 +7,20 @@ import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
 import {Got} from "got";
 
+const parsePldStatsPropertiesAndDensity = (
+  json: string | undefined
+): Record<string, number> => {
+  if (!json) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(json.replaceAll("'", '"'));
+  } catch {
+    return {};
+  }
+};
+
 export default class WebDataCommonsCorpusClassSpecificSubset {
   readonly className: string;
   private readonly downloadHref: string;
@@ -69,9 +83,9 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
             {
               domain: row["Domain"] as string,
               entitiesOfClass: parseInt(row["#Entities of class"]),
-              propertiesAndDensity: row["Properties and Density"]
-                ? JSON.parse(row["Properties and Density"].replaceAll("'", '"'))
-                : {},
+              propertiesAndDensity: parsePldStatsPropertiesAndDensity(
+                row["Properties and Density"]
+              ),
               quadsOfSubset: parseInt(row["#Quads of Subset"]),
             },
           ]
@@ -81,12 +95,12 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
 
   async sampleDataset(): Promise<DatasetCore> {
     const sampleNquadsString: string = (
-      await this.axios.get(this.sampleDownloadHref, {
-        cache: {
-          ttl: 31556952000, // 1 year
-        },
+      await this.httpClient.get(this.sampleDownloadHref, {
+        // cache: {
+        //   ttl: 31556952000, // 1 year
+        // },
       })
-    ).data;
+    ).body;
     const store = new Store();
     const parser = new Parser({format: "N-Quads"});
     store.addQuads(parser.parse(sampleNquadsString));

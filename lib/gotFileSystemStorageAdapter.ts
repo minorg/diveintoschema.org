@@ -10,6 +10,9 @@ export default function gotFileSystemStorageAdapter(
 ): Store<any> {
   fsSync.mkdirSync(directoryPath, {recursive: true});
 
+  const filePath = (key: string) =>
+    path.resolve(directoryPath, encodeFileName(key) + ".json");
+
   return {
     async clear(): Promise<void> {
       for (const file of await fs.readdir(directoryPath)) {
@@ -17,10 +20,9 @@ export default function gotFileSystemStorageAdapter(
       }
     },
 
-    async delete(key): Promise<boolean> {
-      const filePath = path.resolve(directoryPath, encodeFileName(key));
+    async delete(key: string): Promise<boolean> {
       try {
-        await fs.unlink(filePath);
+        await fs.unlink(filePath(key));
         return true;
       } catch {
         return false;
@@ -29,7 +31,7 @@ export default function gotFileSystemStorageAdapter(
 
     async has(key: string): Promise<boolean> {
       try {
-        await fs.access(path.resolve(directoryPath, encodeFileName(key)));
+        await fs.access(filePath(key));
         return true;
       } catch {
         return false;
@@ -37,19 +39,20 @@ export default function gotFileSystemStorageAdapter(
     },
 
     async get(key: string): Promise<any> {
-      const filePath = path.resolve(directoryPath, encodeFileName(key));
       let fileContents: Buffer;
       try {
-        fileContents = await fs.readFile(filePath);
+        fileContents = await fs.readFile(filePath(key));
       } catch {
         return undefined;
       }
-      return JSON.parse(fileContents.toString("utf-8"));
+      return fileContents.toString("utf-8");
     },
 
-    async set(key: string, value: any): Promise<void> {
-      const filePath = path.resolve(directoryPath, encodeFileName(key));
-      await fs.writeFile(filePath, stringify(value, {space: "  "}));
+    async set(key: string, value: string): Promise<void> {
+      await fs.writeFile(
+        filePath(key),
+        stringify(JSON.parse(value), {space: "  "})
+      );
     },
-  });
+  };
 }

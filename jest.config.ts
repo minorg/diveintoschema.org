@@ -7,7 +7,7 @@ const createJestConfig = nextJest({
 });
 
 // Add any custom config to be passed to Jest
-const config: Config = {
+const customJestConfig: Config = {
   //   coverageProvider: "v8",
   moduleNameMapper: {
     "^@/lib/(.*)$": "<rootDir>/lib/$1",
@@ -17,5 +17,10 @@ const config: Config = {
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+// https://stackoverflow.com/questions/70916761/next-js-and-jest-syntaxerror-cannot-use-import-statement-outside-a-module
+module.exports = async () => ({
+  ...(await createJestConfig(customJestConfig)()),
+  transformIgnorePatterns: [
+    "node_modules/(?!(cacheable-lookup|cacheable-request|get-stream|got|lowercase-keys|mimic-response|p-cancelable|normalize-url|responselike|@sindresorhus/is|@szmarczak/http-timer)/)",
+  ],
+});

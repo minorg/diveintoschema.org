@@ -23,11 +23,15 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
     }
   });
 
-  it("get all PLD stats in parallel", async () => {
-    await Promise.all(
-      (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
-        (classSpecificSubset) => classSpecificSubset.pldStats
-      )
-    );
-  });
+  it(
+    "get all PLD stats in parallel",
+    async () => {
+      await Promise.all(
+        (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
+          (classSpecificSubset) => classSpecificSubset.pldStats()
+        )
+      );
+    },
+    30 * 60 * 1000
+  );
 });

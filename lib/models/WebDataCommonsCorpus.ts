@@ -47,8 +47,11 @@ export default class WebDataCommonsCorpus {
   constructor({version}: {version?: string}) {
     this.httpClient = got.extend({
       cache: gotFileSystemStorageAdapter(
-        path.resolve(dataDirPath, "webdatacommons", "axios-cache")
+        path.resolve(dataDirPath, "webdatacommons", "http-cache")
       ),
+      retry: {
+        limit: 10,
+      },
     });
 
     this.version = version ?? "2022-12";
@@ -103,7 +106,6 @@ export default class WebDataCommonsCorpus {
           tableCells[4].getElementsByTagName("a")[1].attributes["href"];
 
         return new WebDataCommonsCorpusClassSpecificSubset({
-          axios: this.axios,
           className: tableRow.getElementsByTagName("th")[0].text,
           downloadHref: downloadHrefs[0],
           generalStats: {
@@ -111,6 +113,7 @@ export default class WebDataCommonsCorpus {
             quads: generalStatsQuads,
             urls: generalStatsUrls,
           },
+          httpClient: this.httpClient,
           pldStatsHref,
           relatedClasses,
           sampleDownloadHref: downloadHrefs[1],
