@@ -2,32 +2,31 @@ import {Parser, Store} from "n3";
 import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
 import {Memoize} from "typescript-memoize";
-import {AxiosCacheInstance} from "axios-cache-interceptor";
 import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
+import {Got} from "got";
 
 export default class WebDataCommonsCorpusClassSpecificSubset {
-  private readonly axios: AxiosCacheInstance;
   readonly className: string;
   private readonly downloadHref: string;
   readonly generalStats: WebDataCommonsClassGeneralStats;
+  private readonly httpClient: Got;
   private readonly pldStatsHref: string;
   readonly relatedClasses: readonly WebDataCommonsRelatedClass[];
   private readonly sampleDownloadHref: string;
   readonly size: string;
 
   constructor({
-    axios,
     className,
     downloadHref,
     generalStats,
+    httpClient,
     relatedClasses,
     pldStatsHref,
     sampleDownloadHref,
     size,
   }: {
-    axios: AxiosCacheInstance;
     className: string;
     downloadHref: string;
     generalStats: {
@@ -35,15 +34,16 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
       quads: number;
       urls: number;
     };
+    httpClient: Got;
     pldStatsHref: string;
     relatedClasses: readonly {count: number; name: string}[];
     sampleDownloadHref: string;
     size: string;
   }) {
-    this.axios = axios;
     this.className = className;
     this.downloadHref = downloadHref;
     this.generalStats = generalStats;
+    this.httpClient = httpClient;
     this.pldStatsHref = pldStatsHref;
     this.relatedClasses = relatedClasses;
     this.sampleDownloadHref = sampleDownloadHref;
@@ -53,12 +53,13 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   @Memoize()
   async pldStats(): Promise<readonly WebDataCommonsClassPayLevelDomainStats[]> {
     const pldStatsCsv: string = (
-      await this.axios.get(this.pldStatsHref, {
-        cache: {
-          ttl: 31556952000, // 1 year
-        },
+      await this.httpClient.get(this.pldStatsHref, {
+        //   cache: {
+        //     ttl: 31556952000, // 1 year
+        //   },
+        // })
       })
-    ).data;
+    ).body;
     return Papa.parse(pldStatsCsv, {
       delimiter: "\t",
       header: true,

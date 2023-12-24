@@ -6,13 +6,12 @@ import {
 } from "node-html-parser";
 import WebDataCommonsCorpusClassSpecificSubset from "./WebDataCommonsCorpusClassSpecificSubset";
 import {Memoize} from "typescript-memoize";
-import Axios from "axios";
-import buildAxiosCacheFileStorage from "@/lib/buildAxiosCacheFileStorage";
-import {AxiosCacheInstance, setupCache} from "axios-cache-interceptor";
+import buildAxiosCacheFileStorage from "@/lib/gotFileSystemStorageAdapter";
 import path from "node:path";
 import {dataDirPath} from "@/lib/paths";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as rax from "retry-axios";
+import got, {Got} from "got";
+import gotFileSystemStorageAdapter from "@/lib/gotFileSystemStorageAdapter";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -42,24 +41,16 @@ const parseRelatedClassTextNode = (textNode: TextNode) => {
 };
 
 export default class WebDataCommonsCorpus {
-  private readonly axios: AxiosCacheInstance;
+  private readonly httpClient: Got;
   readonly version: string;
 
   constructor({version}: {version?: string}) {
-    this.axios = setupCache(Axios.create(), {
-      debug: console.log,
-      storage: buildAxiosCacheFileStorage(
+    this.httpClient = got.extend({
+      cache: gotFileSystemStorageAdapter(
         path.resolve(dataDirPath, "webdatacommons", "axios-cache")
       ),
     });
-    this.axios.defaults.raxConfig = {
-      instance: this.axios,
-      onRetryAttempt: (err) => {
-        const cfg = rax.getConfig(err)!;
-        console.warn(`retry attempt #${cfg.currentRetryAttempt}`);
-      },
-    };
-    rax.attach(this.axios);
+
     this.version = version ?? "2022-12";
   }
 
@@ -68,15 +59,15 @@ export default class WebDataCommonsCorpus {
     readonly WebDataCommonsCorpusClassSpecificSubset[]
   > {
     const metadataHtml: string = (
-      await this.axios.get(
-        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`,
-        {
-          cache: {
-            ttl: 31556952000, // 1 year
-          },
-        }
+      await this.httpClient.get(
+        `https://webdatacommons.org/structureddata/${this.version}/stats/schema_org_subsets.html`
+        // {
+        //   cache: {
+        //     ttl: 31556952000, // 1 year
+        //   },
+        // }
       )
-    ).data;
+    ).body;
 
     return parseHtml(metadataHtml)
       .querySelector("body > div > h2")!
