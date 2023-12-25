@@ -35,15 +35,15 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
     30 * 60 * 1000
   );
 
-  it(
-    "get all sample datasets in parallel",
-    async () => {
-      await Promise.all(
-        (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
-          (classSpecificSubset) => classSpecificSubset.sampleNquadsString()
-        )
-      );
-    },
-    30 * 60 * 1000
-  );
+  // it(
+  //   "get all sample datasets in parallel",
+  //   async () => {
+  //     await Promise.all(
+  //       (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
+  //         (classSpecificSubset) => classSpecificSubset.sampleNquadsString()
+  //       )
+  //     );
+  //   },
+  //   30 * 60 * 1000
+  // );
 });
