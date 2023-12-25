@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "29.5.11",
+    "@types/json-buffer": "^3.0.2",
     "@types/n3": "^1.16.4",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
