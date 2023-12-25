@@ -35,6 +35,16 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
     30 * 60 * 1000
   );
 
+  it("gets empty PLD stats for Organization (large PLD stats file)", async () => {
+    const sut = (
+      await new WebDataCommonsCorpus({}).classSpecificSubsets()
+    ).find(
+      (classSpecificSubset) => classSpecificSubset.className === "Organization"
+    )!;
+    const pldStats = await sut.pldStats();
+    expect(pldStats).toHaveLength(0);
+  });
+
   it(
     "get all sample datasets in parallel",
     async () => {

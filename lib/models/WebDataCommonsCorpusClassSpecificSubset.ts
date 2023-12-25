@@ -86,6 +86,14 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   }
 
   async pldStatsCsvString(): Promise<string> {
+    switch (this.className) {
+      case "Organization":
+      case "Person":
+      case "Product":
+        // Skip large PLD stats files
+        return "";
+    }
+
     return (
       await this.httpClient.get(this.pldStatsHref, {
         //   cache: {
