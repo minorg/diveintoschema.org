@@ -48,6 +48,8 @@ const isTextResponseBody = ({
     .type.toLowerCase();
   if (contentType.startsWith("text/")) {
     return true;
+  } else if (contentType.startsWith("image/")) {
+    return false;
   }
 
   switch (contentType) {
