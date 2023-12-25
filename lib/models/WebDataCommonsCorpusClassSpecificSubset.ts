@@ -5,7 +5,7 @@ import {Memoize} from "typescript-memoize";
 import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
-import {Got} from "got";
+import HttpClient from "@/lib/HttpClient";
 
 const parsePldStatsPropertiesAndDensity = (
   json: string | undefined
@@ -25,7 +25,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   readonly className: string;
   private readonly downloadHref: string;
   readonly generalStats: WebDataCommonsClassGeneralStats;
-  private readonly httpClient: Got;
+  private readonly httpClient: HttpClient;
   private readonly pldStatsHref: string;
   readonly relatedClasses: readonly WebDataCommonsRelatedClass[];
   private readonly sampleDownloadHref: string;
@@ -48,7 +48,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
       quads: number;
       urls: number;
     };
-    httpClient: Got;
+    httpClient: HttpClient;
     pldStatsHref: string;
     relatedClasses: readonly {count: number; name: string}[];
     sampleDownloadHref: string;
@@ -73,7 +73,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
         //   },
         // })
       })
-    ).body;
+    ).toString("utf8");
     return Papa.parse(pldStatsCsv, {
       delimiter: "\t",
       header: true,
@@ -100,7 +100,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
         //   ttl: 31556952000, // 1 year
         // },
       })
-    ).body;
+    ).toString("utf8");
     const store = new Store();
     const parser = new Parser({format: "N-Quads"});
     store.addQuads(parser.parse(sampleNquadsString));

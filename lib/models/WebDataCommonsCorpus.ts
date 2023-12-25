@@ -6,12 +6,10 @@ import {
 } from "node-html-parser";
 import WebDataCommonsCorpusClassSpecificSubset from "./WebDataCommonsCorpusClassSpecificSubset";
 import {Memoize} from "typescript-memoize";
-import buildAxiosCacheFileStorage from "@/lib/gotFileSystemStorageAdapter";
 import path from "node:path";
 import {dataDirPath} from "@/lib/paths";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import got, {Got} from "got";
-import gotFileSystemStorageAdapter from "@/lib/gotFileSystemStorageAdapter";
+import HttpClient from "@/lib/HttpClient";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -41,16 +39,20 @@ const parseRelatedClassTextNode = (textNode: TextNode) => {
 };
 
 export default class WebDataCommonsCorpus {
-  private readonly httpClient: Got;
+  private readonly httpClient: HttpClient;
   readonly version: string;
 
   constructor({version}: {version?: string}) {
-    this.httpClient = got.extend({
-      cache: gotFileSystemStorageAdapter(
-        path.resolve(dataDirPath, "webdatacommons", "http-cache")
+    this.httpClient = new HttpClient({
+      cacheDirectoryPath: path.resolve(
+        dataDirPath,
+        "webdatacommons",
+        "http-cache"
       ),
-      retry: {
-        limit: 10,
+      gotOptions: {
+        retry: {
+          limit: 10,
+        },
       },
     });
 
@@ -70,7 +72,7 @@ export default class WebDataCommonsCorpus {
         //   },
         // }
       )
-    ).body;
+    ).toString("utf8");
 
     return parseHtml(metadataHtml)
       .querySelector("body > div > h2")!

@@ -27,11 +27,11 @@ describe("HttpClient", () => {
   it(
     "gets a text file twice, hitting the cache the second time",
     async () => {
-      const networkHtml = (await sut.get(url)).toString();
+      const networkHtml = (await sut.get(url)).toString("utf8");
       expect(networkHtml.startsWith("<!DOCTYPE html>")).toBe(true);
       expect(fs.existsSync(path.join(cacheFilePath + ".br"))).toBe(true);
 
-      const cacheHtml = (await sut.get(url)).toString();
+      const cacheHtml = (await sut.get(url)).toString("utf8");
       expect(cacheHtml).toStrictEqual(networkHtml);
     },
     30 * 1000
