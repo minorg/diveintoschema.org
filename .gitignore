@@ -4,5 +4,6 @@
 /node_modules
 /out/
 next-env.d.ts
+/.swc/
 yarn-debug.log*
 yarn-error.log*
