@@ -1,0 +1,138 @@
+import got, {ExtendOptions, Got, OptionsOfTextResponseBody} from "got";
+import path from "node:path";
+import fs from "node:fs/promises";
+import zlib from "node:zlib";
+import invariant from "ts-invariant";
+import contentTypeParser from "content-type";
+
+const brotliCompressText = (buffer: Buffer): Promise<Buffer> => {
+  const brotliCompressParams: Record<number, number> = {};
+  brotliCompressParams[zlib.constants.BROTLI_PARAM_MODE] =
+    zlib.constants.BROTLI_MODE_TEXT;
+  return new Promise((resolve, reject) => {
+    zlib.brotliCompress(
+      buffer,
+      {params: brotliCompressParams},
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+const brotliDecompress = (buffer: Buffer): Promise<Buffer> => {
+  return new Promise((resolve, reject) => {
+    zlib.brotliDecompress(buffer, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+const isTextContentType = (contentTypeHeader: string): bool => {
+  const contentType = contentTypeParser
+    .parse(contentTypeHeader)
+    .type.toLowerCase();
+  if (contentType.startsWith("text/")) {
+    return true;
+  }
+
+  switch (contentType) {
+    case "application/json":
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Facade for a simple HTTP client used for fetching data from WebDataCommons and other sites.
+ *
+ * The client:
+ * - only supports GET
+ * - caches response bodies indefinitely on the file system, ignoring RFC 9213 cache control
+ * - throws an exception if a network request would be made in NODE_ENV=production (i.e., from GitHub Pages, where new files wouldn't be added to the committed cache)
+ */
+export default class HttpClient {
+  private readonly cacheDirectoryPath;
+  private readonly got: Got;
+
+  constructor({
+    cacheDirectoryPath,
+    gotOptions,
+  }: {
+    cacheDirectoryPath: string;
+    gotOptions?: ExtendOptions;
+  }) {
+    this.cacheDirectoryPath = cacheDirectoryPath;
+    this.got = gotOptions ? got.extend(gotOptions) : got;
+  }
+
+  private cacheFilePath(url: string): string {
+    const parsedUrl = new URL(url);
+    invariant(parsedUrl.hash.length === 0);
+    invariant(parsedUrl.password.length === 0);
+    invariant(parsedUrl.port.length === 0);
+    invariant(parsedUrl.search.length === 0);
+    invariant(parsedUrl.username.length === 0);
+
+    return path.join(
+      this.cacheDirectoryPath,
+      parsedUrl.protocol.substring(0, parsedUrl.protocol.length - 1),
+      parsedUrl.host,
+      parsedUrl.pathname
+    );
+  }
+
+  async get(
+    url: string,
+    gotOptions?: OptionsOfTextResponseBody
+  ): Promise<Buffer> {
+    let cacheFilePath = this.cacheFilePath(url);
+    try {
+      // Common case, compressed text
+      return await brotliDecompress(await fs.readFile(cacheFilePath + ".br"));
+    } catch {
+      try {
+        // Uncommon case, uncompressed data
+        return await fs.readFile(cacheFilePath);
+      } catch {
+        /* empty */
+      }
+    }
+
+    switch (process.env.NODE_ENV) {
+      case "development":
+      case "test":
+        break;
+      default:
+        throw new Error(
+          `refusing to make network request for ${url} in environment ${process.env.NODE_ENV}`
+        );
+    }
+
+    const response = await this.got.get(url, gotOptions);
+
+    await fs.mkdir(path.dirname(cacheFilePath), {recursive: true});
+
+    let cacheFileContents = response.rawBody;
+
+    const contentTypeHeader = response.headers["content-type"];
+
+    if (contentTypeHeader && isTextContentType(contentTypeHeader)) {
+      cacheFileContents = await brotliCompressText(cacheFileContents);
+      cacheFilePath += ".br";
+    }
+
+    await fs.writeFile(cacheFilePath, cacheFileContents);
+
+    return response.rawBody;
+  }
+}
