@@ -130,20 +130,18 @@ export default class HttpClient {
 
     const response = await this.got.get(url, gotOptions);
 
-    await fs.mkdir(path.dirname(cacheFilePath), {recursive: true});
-
     let cacheFileContents = response.rawBody;
 
     const contentTypeHeader = response.headers["content-type"];
     if (!contentTypeHeader) {
       throw new RangeError("response has no Content-Type header");
     }
-
     if (contentTypeHeader && isTextResponseBody({contentTypeHeader, url})) {
       cacheFileContents = await brotliCompressText(cacheFileContents);
       cacheFilePath += ".br";
     }
 
+    await fs.mkdir(path.dirname(cacheFilePath), {recursive: true});
     await fs.writeFile(cacheFilePath, cacheFileContents);
 
     return response.rawBody;
