@@ -56,7 +56,7 @@ const isTextResponseBody = ({
     case "application/octet-stream":
       return url.endsWith(".csv");
     default:
-      return false;
+      throw new RangeError("unrecognized Content-Type: " + contentType);
   }
 };
 
@@ -133,6 +133,9 @@ export default class HttpClient {
     let cacheFileContents = response.rawBody;
 
     const contentTypeHeader = response.headers["content-type"];
+    if (!contentTypeHeader) {
+      throw new RangeError("response has no Content-Type header");
+    }
 
     if (contentTypeHeader && isTextResponseBody({contentTypeHeader, url})) {
       cacheFileContents = await brotliCompressText(cacheFileContents);
