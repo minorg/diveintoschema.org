@@ -28,7 +28,19 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
     async () => {
       await Promise.all(
         (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
-          (classSpecificSubset) => classSpecificSubset.pldStats()
+          (classSpecificSubset) => classSpecificSubset.pldStatsCsvString()
+        )
+      );
+    },
+    30 * 60 * 1000
+  );
+
+  it(
+    "get all sample datasets",
+    async () => {
+      await Promise.all(
+        (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
+          (classSpecificSubset) => classSpecificSubset.sampleNquadsString()
         )
       );
     },

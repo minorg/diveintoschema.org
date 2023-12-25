@@ -66,15 +66,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
 
   @Memoize()
   async pldStats(): Promise<readonly WebDataCommonsClassPayLevelDomainStats[]> {
-    const pldStatsCsv: string = (
-      await this.httpClient.get(this.pldStatsHref, {
-        //   cache: {
-        //     ttl: 31556952000, // 1 year
-        //   },
-        // })
-      })
-    ).toString("utf8");
-    return Papa.parse(pldStatsCsv, {
+    return Papa.parse(await this.pldStatsCsvString(), {
       delimiter: "\t",
       header: true,
     }).data.flatMap((row: any) =>
@@ -93,17 +85,32 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     );
   }
 
+  async pldStatsCsvString(): Promise<string> {
+    return (
+      await this.httpClient.get(this.pldStatsHref, {
+        //   cache: {
+        //     ttl: 31556952000, // 1 year
+        //   },
+        // })
+      })
+    ).toString("utf8");
+  }
+
+  @Memoize()
   async sampleDataset(): Promise<DatasetCore> {
-    const sampleNquadsString: string = (
+    const store = new Store();
+    const parser = new Parser({format: "N-Quads"});
+    store.addQuads(parser.parse(await this.sampleNquadsString()));
+    return store;
+  }
+
+  async sampleNquadsString(): Promise<string> {
+    return (
       await this.httpClient.get(this.sampleDownloadHref, {
         // cache: {
         //   ttl: 31556952000, // 1 year
         // },
       })
     ).toString("utf8");
-    const store = new Store();
-    const parser = new Parser({format: "N-Quads"});
-    store.addQuads(parser.parse(sampleNquadsString));
-    return store;
   }
 }
