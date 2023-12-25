@@ -36,7 +36,13 @@ const brotliDecompress = (buffer: Buffer): Promise<Buffer> => {
   });
 };
 
-const isTextContentType = (contentTypeHeader: string): bool => {
+const isTextResponseBody = ({
+  contentTypeHeader,
+  url,
+}: {
+  contentTypeHeader: string;
+  url: string;
+}): boolean => {
   const contentType = contentTypeParser
     .parse(contentTypeHeader)
     .type.toLowerCase();
@@ -47,6 +53,8 @@ const isTextContentType = (contentTypeHeader: string): bool => {
   switch (contentType) {
     case "application/json":
       return true;
+    case "application/octet-stream":
+      return url.endsWith(".csv");
     default:
       return false;
   }
@@ -126,7 +134,7 @@ export default class HttpClient {
 
     const contentTypeHeader = response.headers["content-type"];
 
-    if (contentTypeHeader && isTextContentType(contentTypeHeader)) {
+    if (contentTypeHeader && isTextResponseBody({contentTypeHeader, url})) {
       cacheFileContents = await brotliCompressText(cacheFileContents);
       cacheFilePath += ".br";
     }
