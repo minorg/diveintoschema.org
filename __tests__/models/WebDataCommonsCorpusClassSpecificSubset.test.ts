@@ -36,7 +36,7 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
   );
 
   it(
-    "get all sample datasets",
+    "get all sample datasets in parallel",
     async () => {
       await Promise.all(
         (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
