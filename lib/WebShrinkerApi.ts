@@ -13,11 +13,11 @@ const LookupCategoriesDataResponse = Record({
   ),
 });
 
-const ErrorResponse = Record({
-  error: Record({
-    message: String,
-  }),
-});
+// const ErrorResponse = Record({
+//   error: Record({
+//     message: String,
+//   }),
+// });
 
 export default class WebShrinkerApi {
   private readonly accessKey: string;

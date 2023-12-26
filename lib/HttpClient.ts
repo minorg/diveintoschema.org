@@ -124,7 +124,7 @@ export default class HttpClient {
         break;
       default:
         throw new Error(
-          `refusing to make network request for ${url} in environment ${process.env.NODE_ENV}`
+          `refusing to make network request for ${url} in environment ${process.env.NODE_ENV} and ${cacheFilePath} does not exist`
         );
     }
 

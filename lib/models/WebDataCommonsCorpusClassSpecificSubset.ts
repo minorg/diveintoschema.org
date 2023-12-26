@@ -87,6 +87,8 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
 
   async pldStatsCsvString(): Promise<string> {
     switch (this.className) {
+      case "CreativeWork":
+      case "LocalBusiness":
       case "Organization":
       case "Person":
       case "Product":
