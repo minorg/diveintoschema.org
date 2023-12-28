@@ -1,112 +1,119 @@
-export default function RootPage() {
+import Hrefs from "@/lib/Hrefs";
+import JsonLdSyntaxHighlighter from "@/lib/components/JsonLdSyntaxHighlighter";
+import datasetToJsonLdString from "@/lib/datasetToJsonLdString";
+import {DatasetCore} from "@rdfjs/types";
+import {rdf, schema} from "@tpluscode/rdf-ns-builders";
+import {DataFactory, Store} from "n3";
+
+const questionDataset = ((): DatasetCore => {
+  const store = new Store();
+
+  const subject = DataFactory.namedNode("https://diveintoschema.org/question");
+  store.addQuad(subject, rdf.type, schema.Question);
+  store.addQuad(
+    subject,
+    schema.text,
+    DataFactory.literal("Which popular websites are using the Dataset type?")
+  );
+
+  return store;
+})();
+
+const selfDataset = ((): DatasetCore => {
+  const store = new Store();
+
+  const subject = DataFactory.namedNode("https://diveintoschema.org");
+  store.addQuad(subject, rdf.type, schema.WebSite);
+  store.addQuad(
+    subject,
+    schema.license,
+    DataFactory.namedNode("https://creativecommons.org/licenses/by-sa/4.0/")
+  );
+  store.addQuad(
+    subject,
+    schema.name,
+    DataFactory.literal("Dive Into Schema.org")
+  );
+
+  // const publisher = DataFactory.namedNode("https://minorgordon.net");
+  // store.addQuad(publisher, rdf.type, schema.Person);
+  // store.addQuad(publisher, schema.name, DataFactory.literal("Minor Gordon"));
+  // store.addQuad(subject, schema.publisher, publisher);
+
+  return store;
+})();
+
+export default async function RootPage() {
+  const questionDatasetJsonLdString =
+    await datasetToJsonLdString(questionDataset);
+  const selfDatasetJsonLdString = await datasetToJsonLdString(selfDataset);
+
   return (
-    <>Root content</>
-    // <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    //   <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-    //     <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-    //       Get started by editing&nbsp;
-    //       <code className="font-mono font-bold">app/page.tsx</code>
-    //     </p>
-    //     <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-    //       <a
-    //         className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-    //         href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-    //         target="_blank"
-    //         rel="noopener noreferrer"
-    //       >
-    //         By{" "}
-    //         <Image
-    //           src="/vercel.svg"
-    //           alt="Vercel Logo"
-    //           className="dark:invert"
-    //           width={100}
-    //           height={24}
-    //           priority
-    //         />
-    //       </a>
-    //     </div>
-    //   </div>
-
-    //   <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-    //     <Image
-    //       className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-    //       src="/next.svg"
-    //       alt="Next.js Logo"
-    //       width={180}
-    //       height={37}
-    //       priority
-    //     />
-    //   </div>
-
-    //   <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-    //     <a
-    //       href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-    //       className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       <h2 className={`mb-3 text-2xl font-semibold`}>
-    //         Docs{" "}
-    //         <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-    //           -&gt;
-    //         </span>
-    //       </h2>
-    //       <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-    //         Find in-depth information about Next.js features and API.
-    //       </p>
-    //     </a>
-
-    //     <a
-    //       href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-    //       className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       <h2 className={`mb-3 text-2xl font-semibold`}>
-    //         Learn{" "}
-    //         <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-    //           -&gt;
-    //         </span>
-    //       </h2>
-    //       <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-    //         Learn about Next.js in an interactive course with&nbsp;quizzes!
-    //       </p>
-    //     </a>
-
-    //     <a
-    //       href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-    //       className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       <h2 className={`mb-3 text-2xl font-semibold`}>
-    //         Templates{" "}
-    //         <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-    //           -&gt;
-    //         </span>
-    //       </h2>
-    //       <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-    //         Explore starter templates for Next.js.
-    //       </p>
-    //     </a>
-
-    //     <a
-    //       href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-    //       className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       <h2 className={`mb-3 text-2xl font-semibold`}>
-    //         Deploy{" "}
-    //         <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-    //           -&gt;
-    //         </span>
-    //       </h2>
-    //       <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-    //         Instantly deploy your Next.js site to a shareable URL with Vercel.
-    //       </p>
-    //     </a>
-    //   </div>
-    // </main>
+    <div className="flex flex-col gap-24 m-16">
+      <div className="flex flex-row">
+        <div className="flex flex-col flex-grow gap-8 text-4xl">
+          <div>You&apos;ve read the tutorials.</div>
+          <div>You&apos;ve tried the builders and the wizards.</div>
+          <div>
+            You know what structured data is and why it&apos;s useful, and
+            you&apos;re not afraid of JSON-LD.
+          </div>
+          <div>Now what?</div>
+        </div>
+        <div className="text-xl">
+          <JsonLdSyntaxHighlighter jsonLdString={selfDatasetJsonLdString} />
+        </div>
+      </div>
+      <div className="mx-auto text-black text-2xl" style={{maxWidth: "80%"}}>
+        Whether you&apos;re doing search engine optimization or building an
+        ontology, Dive Into Schema.org will help you move beyond toy examples
+        and understand how{" "}
+        <a className="underline" href="https://schema.org">
+          schema.org
+        </a>
+        &nbsp; markup is used in the wild. We&apos;ve curated articles from
+        around the web, cross-referenced data from{" "}
+        <a className="underline" href="https://webdatacommons.org/">
+          WebDataCommons
+        </a>
+        &nbsp; and other sources, and presented it in a form that&apos;s easy to
+        browse and search.
+      </div>
+      <div className="flex flex-row gap-16">
+        <div className="text-xl">
+          <JsonLdSyntaxHighlighter jsonLdString={questionDatasetJsonLdString} />
+        </div>
+        <div className="flex-grow text-2xl">
+          With Dive Into Schema.org, you can answer questions like:
+          <ul className="list-disc list-inside">
+            <li>
+              Which popular websites are using the{" "}
+              <a className="underline" href={Hrefs.type({name: "Dataset"})}>
+                Dataset
+              </a>{" "}
+              type?
+            </li>
+            <li>
+              What are some real-world examples of the{" "}
+              <a
+                className="underline"
+                href={Hrefs.type({name: "GovernmentOrganization"})}
+              >
+                GovernmentOrganization
+              </a>
+              &nbsp; type?
+            </li>
+            <li>Which schema.org types are used on sites about gardening?</li>
+          </ul>
+        </div>
+      </div>
+      <div className="text-black text-center text-2xl">
+        Ready to dive in? Try{" "}
+        <a className="underline" href={Hrefs.types}>
+          browsing the list of types
+        </a>
+        .
+      </div>
+    </div>
   );
 }

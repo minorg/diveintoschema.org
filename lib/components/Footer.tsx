@@ -8,7 +8,10 @@ export default function Footer() {
       }}
     >
       <div className="mx-auto w-full max-w-screen-xl text-center">
-        © 2023 Minor Gordon
+        © 2023{" "}
+        <a className="underline" href="https://minorgordon.net">
+          Minor Gordon
+        </a>
         <br />
         Licensed under the&nbsp;
         <a
