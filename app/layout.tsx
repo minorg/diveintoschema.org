@@ -9,7 +9,7 @@ const sansSerifFont = Lato({subsets: ["latin"], weight: "400"});
 
 export const metadata: Metadata = {
   title: "Dive into Schema.org",
-  description: "Exploring uses of schema.org metadata across the web",
+  description: "Exploring uses of schema.org types across the web",
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
