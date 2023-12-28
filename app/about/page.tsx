@@ -38,7 +38,8 @@ export default async function AboutPage() {
         <p>
           Studying advanced examples of structured data &quot;in the wild&quot;
           is more challenging. I developed Dive Into Schema.org to fill the gap
-          between start-from-zero tutorials and the weeds of raw RDF.
+          between start-from-zero tutorials and the weeds of raw RDF. There is a
+          need for unbiased information, presented well.
         </p>
         <p>
           I&apos;ve needed a reference like Dive Into Schema.org in several of
@@ -47,7 +48,7 @@ export default async function AboutPage() {
           use a property or type I want to understand the nuances of how other
           people are using them. I don&apos;t want to guess at semantics. The
           official documentation is a great starting point, but it&apos;s not
-          always the whole story.
+          the whole story.
         </p>
         <p>
           Dive Into Schema.org is built using{" "}
