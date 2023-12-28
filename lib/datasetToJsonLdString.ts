@@ -3,7 +3,8 @@ import * as jsonld from "jsonld";
 import sdoJsonLdContext from "../data/schema.org-jsonldcontext.json";
 
 export default async function datasetToJsonLdString(
-  dataset: DatasetCore
+  dataset: DatasetCore,
+  options?: {deleteId?: boolean}
 ): Promise<string> {
   const jsonLd = await jsonld.compact(
     await jsonld.fromRDF(dataset, {
@@ -11,7 +12,12 @@ export default async function datasetToJsonLdString(
     }),
     sdoJsonLdContext["@context"]
   );
+
   delete jsonLd["@context"];
+
+  if (options?.deleteId) {
+    delete jsonLd["id"];
+  }
 
   //   const graphs: any[] = compactJsonLd["@graph"];
   //   console.info(JSON.stringify(graphs));

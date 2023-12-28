@@ -16,9 +16,12 @@ export default function Navbar() {
           <b>Dive Into Schema.org</b>
         </a>
       </div>
-      <div className="flex-grow text-xl">
+      <div className="flex gap-8 text-xl">
         <a href={Hrefs.types} className="blocklg:inline-block">
           Types
+        </a>
+        <a href={Hrefs.about} className="blocklg:inline-block">
+          About
         </a>
       </div>
     </nav>

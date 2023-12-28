@@ -1,5 +1,6 @@
 import Hrefs from "@/lib/Hrefs";
 import JsonLdSyntaxHighlighter from "@/lib/components/JsonLdSyntaxHighlighter";
+import Link from "@/lib/components/Link";
 import datasetToJsonLdString from "@/lib/datasetToJsonLdString";
 import {DatasetCore} from "@rdfjs/types";
 import {rdf, schema} from "@tpluscode/rdf-ns-builders";
@@ -67,15 +68,10 @@ export default async function RootPage() {
       <div className="mx-auto text-black text-2xl" style={{maxWidth: "80%"}}>
         Whether you&apos;re doing search engine optimization or building an
         ontology, Dive Into Schema.org will help you move beyond toy examples
-        and understand how{" "}
-        <a className="underline" href="https://schema.org">
-          schema.org
-        </a>
+        and understand how <Link href="https://schema.org">schema.org</Link>
         &nbsp; markup is used in the wild. We&apos;ve curated articles from
         around the web, cross-referenced data from{" "}
-        <a className="underline" href="https://webdatacommons.org/">
-          WebDataCommons
-        </a>
+        <Link href="https://webdatacommons.org/">Web Data Commons</Link>
         &nbsp; and other sources, and presented it in a form that&apos;s easy to
         browse and search.
       </div>
@@ -88,10 +84,7 @@ export default async function RootPage() {
           <ul className="list-disc list-inside">
             <li>
               Which popular websites are using the{" "}
-              <a className="underline" href={Hrefs.type({name: "Dataset"})}>
-                Dataset
-              </a>{" "}
-              type?
+              <Link href={Hrefs.type({name: "Dataset"})}>Dataset</Link> type?
             </li>
             <li>
               What are some real-world examples of the{" "}
@@ -109,10 +102,7 @@ export default async function RootPage() {
       </div>
       <div className="text-black text-center text-2xl">
         Ready to dive in? Try{" "}
-        <a className="underline" href={Hrefs.types}>
-          browsing the list of types
-        </a>
-        .
+        <Link href={Hrefs.types}>browsing the list of types</Link>.
       </div>
     </div>
   );

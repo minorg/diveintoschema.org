@@ -5,6 +5,7 @@ import WebDataCommonsClassGeneralStats from "@/lib/models/WebDataCommonsClassGen
 import WebDataCommonsRelatedClass from "@/lib/models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
+import Link from "./Link";
 
 interface Type {
   name: string;
@@ -49,9 +50,7 @@ const columns: ColumnDef<Type, any>[] = [
             .map((relatedType) => (
               <tr key={relatedType.name}>
                 <td className="pr-4">
-                  <a className="underline" href={Hrefs.type(relatedType)}>
-                    {relatedType.name}
-                  </a>
+                  <Link href={Hrefs.type(relatedType)}>{relatedType.name}</Link>
                 </td>
                 <td>{relatedType.count.toLocaleString()}</td>
               </tr>

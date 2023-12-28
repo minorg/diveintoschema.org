@@ -1,4 +1,8 @@
 export default class Hrefs {
+  static get about() {
+    return "/about";
+  }
+
   static get contact() {
     return "https://minorgordon.net/contact";
   }

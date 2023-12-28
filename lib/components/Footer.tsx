@@ -1,3 +1,6 @@
+import LicenseLink from "./LicenseLink";
+import Link from "./Link";
+
 export default function Footer() {
   return (
     <footer
@@ -8,18 +11,10 @@ export default function Footer() {
       }}
     >
       <div className="mx-auto w-full max-w-screen-xl text-center">
-        © 2023{" "}
-        <a className="underline" href="https://minorgordon.net">
-          Minor Gordon
-        </a>
+        © 2023 <Link href="https://minorgordon.net">Minor Gordon</Link>
         <br />
         Licensed under the&nbsp;
-        <a
-          className="underline"
-          href="https://creativecommons.org/licenses/by-sa/4.0/"
-        >
-          Creative Commons Attribution-ShareAlike License 4.0
-        </a>
+        <LicenseLink />
       </div>
     </footer>
   );

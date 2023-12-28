@@ -1,4 +1,5 @@
 import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import Link from "@/lib/components/Link";
 import TypeDomainsTable from "@/lib/components/TypeDomainsTable";
 import TypeGeneralStatsTable from "@/lib/components/TypeGeneralStatsTable";
 
@@ -21,9 +22,7 @@ export default async function TypePage({
   return (
     <div className="flex flex-col gap-8">
       <div className="font-bold text-2xl">{name}</div>
-      <a className="underline" href={`https://schema.org/{name}`}>
-        Schema.org documentation
-      </a>
+      <Link href={`https://schema.org/{name}`}>Schema.org documentation</Link>
       <div>
         <div className="font-bold">General statistics</div>
         <div className="ml-2 mt-2">
