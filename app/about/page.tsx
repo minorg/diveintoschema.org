@@ -12,6 +12,18 @@ const selfDataset = ((): DatasetCore => {
 
   const subject = DataFactory.blankNode();
   store.addQuad(subject, rdf.type, schema.Person);
+  store.addQuad(
+    subject,
+    schema.description,
+    DataFactory.literal("Author of Dive Into Schema.org")
+  );
+  store.addQuad(subject, schema.familyName, DataFactory.literal("Gordon"));
+  store.addQuad(subject, schema.givenName, DataFactory.literal("Minor"));
+  store.addQuad(
+    subject,
+    schema.knowsAbout,
+    DataFactory.namedNode("https://schema.org")
+  );
   store.addQuad(subject, schema.name, DataFactory.literal("Minor Gordon"));
   store.addQuad(
     subject,
@@ -28,7 +40,7 @@ export default async function AboutPage() {
   });
 
   return (
-    <div className="flex flex-row m-16">
+    <div className="flex flex-row gap-6 m-16">
       <div className="flex flex-col gap-6 text-xl" style={{flex: 2}}>
         <p>
           Schema.org types are well-documented on schema.org itself, and there
