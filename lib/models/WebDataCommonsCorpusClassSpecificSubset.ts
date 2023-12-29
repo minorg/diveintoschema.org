@@ -6,6 +6,7 @@ import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
 import HttpClient from "@/lib/HttpClient";
+import WebDataCommonsCorpusPageSubset from "./WebDataCommonsCorpusPageSubset";
 
 const parsePldStatsPropertiesAndDensity = (
   json: string | undefined
@@ -107,11 +108,16 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
   }
 
   @Memoize()
-  async sampleDataset(): Promise<DatasetCore> {
+  private async sampleStore(): Promise<DatasetCore> {
     const store = new Store();
     const parser = new Parser({format: "N-Quads"});
     store.addQuads(parser.parse(await this.sampleNquadsString()));
     return store;
+  }
+
+  @Memoize()
+  async samplePages(): Promise<readonly WebDataCommonsCorpusPageSubset[]> {
+    const store = await this.sampleDataset();
   }
 
   async sampleNquadsString(): Promise<string> {
