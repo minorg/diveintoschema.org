@@ -1,4 +1,3 @@
-import type {Metadata} from "next";
 import {Lato} from "next/font/google";
 import "./globals.css";
 import Navbar from "@/lib/components/Navbar";
@@ -6,11 +5,6 @@ import Footer from "@/lib/components/Footer";
 
 // const sansSerifFont = DM_Sans({subsets: ["latin"]});
 const sansSerifFont = Lato({subsets: ["latin"], weight: "400"});
-
-export const metadata: Metadata = {
-  title: "Dive into Schema.org",
-  description: "Exploring uses of schema.org types across the web",
-};
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (

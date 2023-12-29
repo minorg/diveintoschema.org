@@ -1,4 +1,5 @@
 import Hrefs from "@/lib/Hrefs";
+import PageMetadata from "@/lib/PageMetadata";
 import JsonLdSyntaxHighlighter from "@/lib/components/JsonLdSyntaxHighlighter";
 import LicenseLink from "@/lib/components/LicenseLink";
 import Link from "@/lib/components/Link";
@@ -6,6 +7,8 @@ import datasetToJsonLdString from "@/lib/datasetToJsonLdString";
 import {DatasetCore} from "@rdfjs/types";
 import {rdf, schema} from "@tpluscode/rdf-ns-builders";
 import {DataFactory, Store} from "n3";
+
+export const metadata = PageMetadata.about;
 
 const selfDataset = ((): DatasetCore => {
   const store = new Store();

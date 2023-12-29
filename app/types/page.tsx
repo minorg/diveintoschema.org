@@ -1,5 +1,8 @@
+import PageMetadata from "@/lib/PageMetadata";
 import webDataCommonsCorpus from "../webDataCommonsCorpus";
 import TypesTable from "@/lib/components/TypesTable";
+
+export const metadata = PageMetadata.types;
 
 export default async function TypesPage() {
   return (

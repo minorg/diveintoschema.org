@@ -1,7 +1,9 @@
 import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import PageMetadata from "@/lib/PageMetadata";
 import Link from "@/lib/components/Link";
 import TypeDomainsTable from "@/lib/components/TypeDomainsTable";
 import TypeGeneralStatsTable from "@/lib/components/TypeGeneralStatsTable";
+import {Metadata} from "next";
 
 interface TypePageParams {
   name: string;
@@ -46,6 +48,10 @@ export default async function TypePage({
       </div>
     </div>
   );
+}
+
+export function generateMetadata({params}: {params: TypePageParams}): Metadata {
+  return PageMetadata.type(params);
 }
 
 export async function generateStaticParams(): Promise<TypePageParams[]> {
