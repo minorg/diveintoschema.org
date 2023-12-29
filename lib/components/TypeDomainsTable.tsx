@@ -3,6 +3,7 @@
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import WebDataCommonsClassPayLevelDomainStats from "../models/WebDataCommonsClassPayLevelDomainStats";
+import Link from "./Link";
 
 interface TypeDomain {
   domain: string;
@@ -46,12 +47,9 @@ const staticColumns: ColumnDef<TypeDomain, any>[] = [
             {propertiesAndDensityArray.map(({property, density}) => (
               <tr key={property}>
                 <td className="pr-4">
-                  <a
-                    className="underline"
-                    href={`https://schema.org/` + property}
-                  >
+                  <Link href={`https://schema.org/` + property}>
                     {property}
-                  </a>
+                  </Link>
                 </td>
                 <td>{density.toLocaleString()}</td>
               </tr>

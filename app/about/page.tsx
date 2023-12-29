@@ -73,12 +73,9 @@ export default async function AboutPage() {
           incorporates extracts and metadata from the{" "}
           <Link href="https://webdatacommons.org">Web Data Commons corpus</Link>{" "}
           and rankings from{" "}
-          <a
-            className="underline"
-            href="https://majestic.com/reports/majestic-million"
-          >
+          <Link href="https://majestic.com/reports/majestic-million">
             The Majestic Million
-          </a>
+          </Link>
           .
         </p>
         <p>

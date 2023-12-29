@@ -91,12 +91,9 @@ export default async function RootPage() {
             </li>
             <li>
               What are some real-world examples of the{" "}
-              <a
-                className="underline"
-                href={Hrefs.type({name: "GovernmentOrganization"})}
-              >
+              <Link href={Hrefs.type({name: "GovernmentOrganization"})}>
                 GovernmentOrganization
-              </a>
+              </Link>
               &nbsp; type?
             </li>
             <li>Which schema.org types are used on sites about gardening?</li>

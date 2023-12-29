@@ -18,12 +18,9 @@ const columnHelper = createColumnHelper<Type>();
 const columns: ColumnDef<Type, any>[] = [
   columnHelper.accessor("name", {
     cell: (context) => (
-      <a
-        className="underline"
-        href={Hrefs.type({name: context.cell.getValue()})}
-      >
+      <Link href={Hrefs.type({name: context.cell.getValue()})}>
         {context.cell.getValue()}
-      </a>
+      </Link>
     ),
     header: () => "Type",
   }),
