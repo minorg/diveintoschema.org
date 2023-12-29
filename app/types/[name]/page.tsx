@@ -1,4 +1,5 @@
 import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
 import Link from "@/lib/components/Link";
 import TypeDomainsTable from "@/lib/components/TypeDomainsTable";
@@ -20,6 +21,9 @@ export default async function TypePage({
 
   const generalStats = classSpecificSubset.generalStats;
   const pldStats = await classSpecificSubset.pldStats();
+  const samplePages = Object.values(
+    await classSpecificSubset.samplePagesByIri()
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -31,21 +35,44 @@ export default async function TypePage({
           <TypeGeneralStatsTable {...generalStats} />
         </div>
       </div>
-      <div>
-        <div className="font-bold">Domain statistics</div>
-        <div className="ml-2 mt-2">
-          <TypeDomainsTable
-            rows={pldStats.map((pldStatsRow) => ({
-              domain: pldStatsRow.domain,
-              stats: {
-                entitiesOfClass: pldStatsRow.entitiesOfClass,
-                propertiesAndDensity: pldStatsRow.propertiesAndDensity,
-                quadsOfSubset: pldStatsRow.quadsOfSubset,
-              },
-            }))}
-          />
+      {pldStats.length > 0 ? (
+        <div>
+          <div className="font-bold">Domain statistics</div>
+          <div className="ml-2 mt-2">
+            <TypeDomainsTable
+              rows={pldStats.map((pldStatsRow) => ({
+                domain: pldStatsRow.domain,
+                stats: {
+                  entitiesOfClass: pldStatsRow.entitiesOfClass,
+                  propertiesAndDensity: pldStatsRow.propertiesAndDensity,
+                  quadsOfSubset: pldStatsRow.quadsOfSubset,
+                },
+              }))}
+            />
+          </div>
         </div>
-      </div>
+      ) : null}
+      {samplePages.length > 0 ? (
+        <div>
+          <div className="font-bold">Sample pages</div>
+          <div className="ml-2 mt-2">
+            <ul className="list-inside list-disc">
+              {samplePages.map((samplePage) => (
+                <li key={samplePage.pageIri.value}>
+                  <Link
+                    href={Hrefs.typeSamplePage({
+                      pageIri: samplePage.pageIri.value,
+                      typeName: name,
+                    })}
+                  >
+                    {samplePage.pageIri.value}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
