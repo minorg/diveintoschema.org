@@ -1,5 +1,4 @@
 import {Parser, Store} from "n3";
-import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
 import {Memoize} from "typescript-memoize";
 import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
@@ -107,19 +106,6 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     ).toString("utf8");
   }
 
-  @Memoize()
-  private async sampleStore(): Promise<DatasetCore> {
-    const store = new Store();
-    const parser = new Parser({format: "N-Quads"});
-    store.addQuads(parser.parse(await this.sampleNquadsString()));
-    return store;
-  }
-
-  @Memoize()
-  async samplePages(): Promise<readonly WebDataCommonsCorpusPageSubset[]> {
-    const store = await this.sampleDataset();
-  }
-
   async sampleNquadsString(): Promise<string> {
     return (
       await this.httpClient.get(this.sampleDownloadHref, {
@@ -128,5 +114,33 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
         // },
       })
     ).toString("utf8");
+  }
+
+  @Memoize()
+  async samplePagesByIri(): Promise<
+    Record<string, WebDataCommonsCorpusPageSubset>
+  > {
+    const result: Record<string, WebDataCommonsCorpusPageSubset> = {};
+    const parser = new Parser({format: "N-Quads"});
+    parser.parse(await this.sampleNquadsString(), (error, quad) => {
+      if (error) {
+        throw error;
+      } else if (!quad) {
+        return;
+      }
+      const pageIri = quad.graph;
+      if (pageIri.termType !== "NamedNode") {
+        return;
+      }
+      let page = result[pageIri.value];
+      if (!page) {
+        page = result[pageIri.value] = new WebDataCommonsCorpusPageSubset({
+          dataset: new Store(),
+          pageIri,
+        });
+      }
+      (page.dataset as Store).addQuad(quad);
+    });
+    return result;
   }
 }

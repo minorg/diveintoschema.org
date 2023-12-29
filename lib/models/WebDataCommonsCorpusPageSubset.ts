@@ -8,6 +8,4 @@ export default class WebDataCommonsCorpusPageSubset {
     this.dataset = dataset;
     this.pageIri = pageIri;
   }
-
-  fromStore(store: Store): readonly WebDataCommonsCorpusPageSubset[] {}
 }
