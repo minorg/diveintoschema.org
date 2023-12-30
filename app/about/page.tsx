@@ -43,7 +43,7 @@ export default async function AboutPage() {
   });
 
   return (
-    <div className="flex flex-row gap-6 m-16">
+    <div className="flex flex-row gap-6">
       <div className="flex flex-col gap-6 text-xl" style={{flex: 2}}>
         <p>
           Schema.org types are well-documented on schema.org itself, and there

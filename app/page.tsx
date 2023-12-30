@@ -53,7 +53,7 @@ export default async function RootPage() {
   const selfDatasetJsonLdString = await datasetToJsonLdString(selfDataset);
 
   return (
-    <div className="flex flex-col gap-24 m-16">
+    <div className="flex flex-col gap-24">
       <div className="flex flex-row">
         <div className="flex flex-col flex-grow gap-8 text-4xl">
           <div>You&apos;ve read the tutorials.</div>
