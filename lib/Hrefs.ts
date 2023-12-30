@@ -1,3 +1,5 @@
+import slugify from "./slugify";
+
 export default class Hrefs {
   static get about() {
     return "/about";
@@ -16,17 +18,13 @@ export default class Hrefs {
   }
 
   static typeSamplePage({
-    samplePageIri,
+    samplePageIriSlug,
     typeName,
   }: {
-    samplePageIri: string;
+    samplePageIriSlug: string;
     typeName: string;
   }) {
-    return (
-      Hrefs.type({name: typeName}) +
-      "/samples/" +
-      Buffer.from(samplePageIri, "utf-8").toString("base64url")
-    );
+    return Hrefs.type({name: typeName}) + "/samples/" + samplePageIriSlug;
   }
 
   static get types() {

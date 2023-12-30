@@ -5,6 +5,7 @@ import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
 import Link from "@/lib/components/Link";
 import TypeDomainsTable from "@/lib/components/TypeDomainsTable";
 import TypeGeneralStatsTable from "@/lib/components/TypeGeneralStatsTable";
+import slugify from "@/lib/slugify";
 import {Metadata} from "next";
 
 interface TypePageParams {
@@ -73,7 +74,7 @@ export default async function TypePage({
                   <li key={samplePage.pageIri.value}>
                     <Link
                       href={Hrefs.typeSamplePage({
-                        samplePageIri: samplePage.pageIri.value,
+                        samplePageIriSlug: slugify(samplePage.pageIri.value),
                         typeName,
                       })}
                     >

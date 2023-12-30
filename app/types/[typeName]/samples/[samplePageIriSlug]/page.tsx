@@ -4,27 +4,37 @@ import PageMetadata from "@/lib/PageMetadata";
 import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
 import DatasetSyntaxHighlighters from "@/lib/components/DatasetSyntaxHighlighters";
 import datasetToStrings from "@/lib/datasetToStrings";
+import WebDataCommonsCorpusPageSubset from "@/lib/models/WebDataCommonsCorpusPageSubset";
+import slugify from "@/lib/slugify";
 import {Metadata} from "next";
+import invariant from "ts-invariant";
 
 interface TypeSamplePageParams {
-  samplePageIri: string;
+  samplePageIriSlug: string;
   typeName: string;
 }
 
-export default async function TypeSamplePage({
-  params: {samplePageIri: samplePageIriEncoded, typeName},
-}: {
-  params: TypeSamplePageParams;
-}) {
+async function getSamplePage({
+  samplePageIriSlug,
+  typeName,
+}: TypeSamplePageParams): Promise<WebDataCommonsCorpusPageSubset> {
   const classSpecificSubset = (
     await webDataCommonsCorpus.classSpecificSubsetsByClassName()
   )[typeName];
-  const samplePageIri = Buffer.from(samplePageIriEncoded, "base64url").toString(
-    "utf-8"
-  );
-  const samplePage = (await classSpecificSubset.samplePagesByIri())[
-    samplePageIri
+  invariant(classSpecificSubset, typeName);
+  const samplePage = (await classSpecificSubset.samplePagesByIriSlug())[
+    samplePageIriSlug
   ];
+  invariant(samplePage, samplePageIriSlug);
+  return samplePage;
+}
+
+export default async function TypeSamplePage({
+  params: {samplePageIriSlug, typeName},
+}: {
+  params: TypeSamplePageParams;
+}) {
+  const samplePage = await getSamplePage({samplePageIriSlug, typeName});
 
   return (
     <BreadcrumbsLayout
@@ -41,8 +51,8 @@ export default async function TypeSamplePage({
           text: "Sample pages",
         },
         {
-          href: Hrefs.typeSamplePage({samplePageIri, typeName}),
-          text: samplePageIri,
+          href: Hrefs.typeSamplePage({samplePageIriSlug, typeName}),
+          text: samplePage.pageIri.value,
         },
       ]}
     >
@@ -53,12 +63,16 @@ export default async function TypeSamplePage({
   );
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
   params: TypeSamplePageParams;
-}): Metadata {
-  return PageMetadata.typeSamplePage(params);
+}): Promise<Metadata> {
+  const samplePage = await getSamplePage(params);
+  return PageMetadata.typeSamplePage({
+    samplePageIri: samplePage.pageIri.value,
+    typeName: params.typeName,
+  });
 }
 
 export async function generateStaticParams(): Promise<TypeSamplePageParams[]> {
@@ -68,10 +82,7 @@ export async function generateStaticParams(): Promise<TypeSamplePageParams[]> {
         (classSpecificSubset) =>
           classSpecificSubset.samplePagesByIri().then((samplePagesByIri) =>
             Object.values(samplePagesByIri).map((samplePage) => ({
-              samplePageIri: Buffer.from(
-                samplePage.pageIri.value,
-                "utf-8"
-              ).toString("base64url"),
+              samplePageIriSlug: slugify(samplePage.pageIri.value),
               typeName: classSpecificSubset.className,
             }))
           )

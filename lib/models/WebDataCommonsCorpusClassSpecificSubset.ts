@@ -6,6 +6,7 @@ import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
 import HttpClient from "@/lib/HttpClient";
 import WebDataCommonsCorpusPageSubset from "./WebDataCommonsCorpusPageSubset";
+import slugify from "../slugify";
 
 const parsePldStatsPropertiesAndDensity = (
   json: string | undefined
@@ -142,6 +143,18 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
       }
       (page.dataset as Store).addQuad(quad);
     });
+    return result;
+  }
+
+  @Memoize()
+  async samplePagesByIriSlug(): Promise<
+    Record<string, WebDataCommonsCorpusPageSubset>
+  > {
+    const samplePagesByIri = await this.samplePagesByIri();
+    const result: Record<string, WebDataCommonsCorpusPageSubset> = {};
+    for (const samplePageIri in samplePagesByIri) {
+      result[slugify(samplePageIri)] = samplePagesByIri[samplePageIri];
+    }
     return result;
   }
 }

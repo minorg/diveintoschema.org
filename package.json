@@ -21,7 +21,8 @@
     "react-tabs": "^6.0.2",
     "runtypes": "^6.7.0",
     "ts-invariant": "^0.10.3",
-    "typescript-memoize": "^1.1.1"
+    "typescript-memoize": "^1.1.1",
+    "url-slug": "^4.0.1"
   },
   "devDependencies": {
     "@types/content-type": "^1.1.8",
