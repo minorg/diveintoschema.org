@@ -1,5 +1,3 @@
-import slugify from "./slugify";
-
 export default class Hrefs {
   static get about() {
     return "/about";
