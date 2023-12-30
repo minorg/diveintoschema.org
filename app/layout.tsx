@@ -12,7 +12,9 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body className={sansSerifFont.className}>
         <div className="flex flex-col min-h-screen justify-between">
           <Navbar />
-          <main className="flex-grow sm:m-4 md:m-8 lg:m-16">{children}</main>
+          <main className="flex-grow sm:mx-4 md:mx-8 lg:mx-16 my-4">
+            {children}
+          </main>
           <Footer />
         </div>
       </body>

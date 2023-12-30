@@ -14,7 +14,7 @@ export default function DatasetSyntaxHighlighters({
   };
 }) {
   return (
-    <Tabs>
+    <Tabs defaultIndex={1}>
       <TabList>
         <Tab>JSON-LD</Tab>
         <Tab>Turtle</Tab>

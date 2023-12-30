@@ -1,5 +1,7 @@
 import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
+import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
 import DatasetSyntaxHighlighters from "@/lib/components/DatasetSyntaxHighlighters";
 import datasetToStrings from "@/lib/datasetToStrings";
 import {Metadata} from "next";
@@ -10,21 +12,44 @@ interface TypeSamplePageParams {
 }
 
 export default async function TypeSamplePage({
-  params: {samplePageIri, typeName},
+  params: {samplePageIri: samplePageIriEncoded, typeName},
 }: {
   params: TypeSamplePageParams;
 }) {
   const classSpecificSubset = (
     await webDataCommonsCorpus.classSpecificSubsetsByClassName()
   )[typeName];
+  const samplePageIri = Buffer.from(samplePageIriEncoded, "base64url").toString(
+    "utf-8"
+  );
   const samplePage = (await classSpecificSubset.samplePagesByIri())[
-    Buffer.from(samplePageIri, "base64url").toString("utf-8")
+    samplePageIri
   ];
 
   return (
-    <DatasetSyntaxHighlighters
-      dataset={await datasetToStrings(samplePage.dataset)}
-    />
+    <BreadcrumbsLayout
+      breadcrumbs={[
+        {
+          href: Hrefs.types,
+          text: "Types",
+        },
+        {
+          href: Hrefs.type({name: typeName}),
+          text: typeName,
+        },
+        {
+          text: "Sample pages",
+        },
+        {
+          href: Hrefs.typeSamplePage({samplePageIri, typeName}),
+          text: samplePageIri,
+        },
+      ]}
+    >
+      <DatasetSyntaxHighlighters
+        dataset={await datasetToStrings(samplePage.dataset)}
+      />
+    </BreadcrumbsLayout>
   );
 }
 

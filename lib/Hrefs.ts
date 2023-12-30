@@ -7,6 +7,10 @@ export default class Hrefs {
     return "https://minorgordon.net/contact";
   }
 
+  static get root() {
+    return "/";
+  }
+
   static type({name}: {name: string}) {
     return Hrefs.types + "/" + name;
   }

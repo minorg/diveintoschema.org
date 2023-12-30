@@ -12,7 +12,7 @@ export default function Navbar() {
     >
       <div className="flex items-center">
         <PuzzlePieceIcon className="mr-2 w-6" />
-        <a href="/" className="mr-8 block lg:inline-block text-xl">
+        <a href={Hrefs.root} className="mr-8 block lg:inline-block text-xl">
           <b>Dive Into Schema.org</b>
         </a>
       </div>
