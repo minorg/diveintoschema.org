@@ -53,7 +53,7 @@ export default async function RootPage() {
     await datasetToJsonLdString(questionDataset);
   const selfDatasetJsonLdString = await datasetToJsonLdString(selfDataset);
 
-  // Nest MainLayout again to get some extra margins
+  // Nest MainLayout again to get some extra padding
   return (
     <MainLayout>
       <div className="flex flex-col gap-24">
