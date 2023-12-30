@@ -124,7 +124,8 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     const parser = new Parser({format: "N-Quads"});
     parser.parse(await this.sampleNquadsString(), (error, quad) => {
       if (error) {
-        throw error;
+        return;
+        // throw error;
       } else if (!quad) {
         return;
       }

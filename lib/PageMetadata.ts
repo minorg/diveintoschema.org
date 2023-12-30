@@ -21,7 +21,7 @@ export default class PageMetadata {
   static type({name}: {name: string}): Metadata {
     return {
       description,
-      title: titlePrefix + "Types: " + name,
+      title: titlePrefix + "Type: " + name,
     };
   }
 
@@ -29,6 +29,19 @@ export default class PageMetadata {
     return {
       description,
       title: titlePrefix + "Types",
+    };
+  }
+
+  static typeSamplePage({
+    samplePageIri,
+    typeName,
+  }: {
+    samplePageIri: string;
+    typeName: string;
+  }) {
+    return {
+      description,
+      title: titlePrefix + `Type: ${typeName} > Sample: ${samplePageIri}`,
     };
   }
 }

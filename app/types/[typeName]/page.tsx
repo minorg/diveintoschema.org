@@ -7,17 +7,17 @@ import TypeGeneralStatsTable from "@/lib/components/TypeGeneralStatsTable";
 import {Metadata} from "next";
 
 interface TypePageParams {
-  name: string;
+  typeName: string;
 }
 
 export default async function TypePage({
-  params: {name},
+  params: {typeName},
 }: {
   params: TypePageParams;
 }) {
   const classSpecificSubset = (
     await webDataCommonsCorpus.classSpecificSubsetsByClassName()
-  )[name];
+  )[typeName];
 
   const generalStats = classSpecificSubset.generalStats;
   const pldStats = await classSpecificSubset.pldStats();
@@ -27,7 +27,7 @@ export default async function TypePage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="font-bold text-2xl">{name}</div>
+      <div className="font-bold text-2xl">{typeName}</div>
       <Link href={`https://schema.org/{name}`}>Schema.org documentation</Link>
       <div>
         <div className="font-bold">General statistics</div>
@@ -61,8 +61,8 @@ export default async function TypePage({
                 <li key={samplePage.pageIri.value}>
                   <Link
                     href={Hrefs.typeSamplePage({
-                      pageIri: samplePage.pageIri.value,
-                      typeName: name,
+                      samplePageIri: samplePage.pageIri.value,
+                      typeName,
                     })}
                   >
                     {samplePage.pageIri.value}
@@ -78,13 +78,13 @@ export default async function TypePage({
 }
 
 export function generateMetadata({params}: {params: TypePageParams}): Metadata {
-  return PageMetadata.type(params);
+  return PageMetadata.type({name: params.typeName});
 }
 
 export async function generateStaticParams(): Promise<TypePageParams[]> {
   return (await webDataCommonsCorpus.classSpecificSubsets()).map(
     (classSpecificSubset) => ({
-      name: classSpecificSubset.className,
+      typeName: classSpecificSubset.className,
     })
   );
 }
