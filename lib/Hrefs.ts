@@ -1,5 +1,3 @@
-import encodeFileName from "./encodeFileName";
-
 export default class Hrefs {
   static get about() {
     return "/about";
