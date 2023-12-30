@@ -1,11 +1,11 @@
 import {Parser, Store} from "n3";
-import {DatasetCore} from "@rdfjs/types";
 import Papa from "papaparse";
 import {Memoize} from "typescript-memoize";
 import WebDataCommonsClassGeneralStats from "./WebDataCommonsClassGeneralStats";
 import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 import WebDataCommonsClassPayLevelDomainStats from "./WebDataCommonsClassPayLevelDomainStats";
 import HttpClient from "@/lib/HttpClient";
+import WebDataCommonsCorpusPageSubset from "./WebDataCommonsCorpusPageSubset";
 
 const parsePldStatsPropertiesAndDensity = (
   json: string | undefined
@@ -106,14 +106,6 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     ).toString("utf8");
   }
 
-  @Memoize()
-  async sampleDataset(): Promise<DatasetCore> {
-    const store = new Store();
-    const parser = new Parser({format: "N-Quads"});
-    store.addQuads(parser.parse(await this.sampleNquadsString()));
-    return store;
-  }
-
   async sampleNquadsString(): Promise<string> {
     return (
       await this.httpClient.get(this.sampleDownloadHref, {
@@ -122,5 +114,34 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
         // },
       })
     ).toString("utf8");
+  }
+
+  @Memoize()
+  async samplePagesByIri(): Promise<
+    Record<string, WebDataCommonsCorpusPageSubset>
+  > {
+    const result: Record<string, WebDataCommonsCorpusPageSubset> = {};
+    const parser = new Parser({format: "N-Quads"});
+    parser.parse(await this.sampleNquadsString(), (error, quad) => {
+      if (error) {
+        return;
+        // throw error;
+      } else if (!quad) {
+        return;
+      }
+      const pageIri = quad.graph;
+      if (pageIri.termType !== "NamedNode") {
+        return;
+      }
+      let page = result[pageIri.value];
+      if (!page) {
+        page = result[pageIri.value] = new WebDataCommonsCorpusPageSubset({
+          dataset: new Store(),
+          pageIri,
+        });
+      }
+      (page.dataset as Store).addQuad(quad);
+    });
+    return result;
   }
 }

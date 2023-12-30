@@ -7,8 +7,26 @@ export default class Hrefs {
     return "https://minorgordon.net/contact";
   }
 
+  static get root() {
+    return "/";
+  }
+
   static type({name}: {name: string}) {
     return Hrefs.types + "/" + name;
+  }
+
+  static typeSamplePage({
+    samplePageIri,
+    typeName,
+  }: {
+    samplePageIri: string;
+    typeName: string;
+  }) {
+    return (
+      Hrefs.type({name: typeName}) +
+      "/samples/" +
+      Buffer.from(samplePageIri, "utf-8").toString("base64url")
+    );
   }
 
   static get types() {

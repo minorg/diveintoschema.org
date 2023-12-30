@@ -11,7 +11,11 @@ export default function Link({
   "href"
 >) {
   return (
-    <a className={`${className} underline`} href={href} {...otherProps}>
+    <a
+      className={className ? `${className} underline` : "underline"}
+      href={href}
+      {...otherProps}
+    >
       {children}
     </a>
   );

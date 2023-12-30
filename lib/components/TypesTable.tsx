@@ -6,6 +6,7 @@ import WebDataCommonsRelatedClass from "@/lib/models/WebDataCommonsRelatedClass"
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import Link from "./Link";
+import {Table as TableModel} from "@tanstack/react-table";
 
 interface Type {
   name: string;
@@ -15,15 +16,21 @@ interface Type {
 
 const columnHelper = createColumnHelper<Type>();
 
+const hasRow = (rowId: string, table: TableModel<any>): boolean => {
+  try {
+    table.getRow(rowId);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const columns: ColumnDef<Type, any>[] = [
   columnHelper.accessor("name", {
     cell: (context) => (
-      <a
-        className="underline"
-        href={Hrefs.type({name: context.cell.getValue()})}
-      >
+      <Link href={Hrefs.type({name: context.cell.getValue()})}>
         {context.cell.getValue()}
-      </a>
+      </Link>
     ),
     header: () => "Type",
   }),
@@ -50,7 +57,13 @@ const columns: ColumnDef<Type, any>[] = [
             .map((relatedType) => (
               <tr key={relatedType.name}>
                 <td className="pr-4">
-                  <Link href={Hrefs.type(relatedType)}>{relatedType.name}</Link>
+                  {hasRow(relatedType.name, context.table) ? (
+                    <Link href={Hrefs.type(relatedType)}>
+                      {relatedType.name}
+                    </Link>
+                  ) : (
+                    <span>{relatedType.name}</span>
+                  )}
                 </td>
                 <td>{relatedType.count.toLocaleString()}</td>
               </tr>
@@ -65,5 +78,5 @@ const columns: ColumnDef<Type, any>[] = [
 ];
 
 export default function TypesTable({rows}: {rows: Type[]}) {
-  return <Table columns={columns} rows={rows} />;
+  return <Table columns={columns} getRowId={(row) => row.name} rows={rows} />;
 }

@@ -3,6 +3,7 @@
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import WebDataCommonsClassPayLevelDomainStats from "../models/WebDataCommonsClassPayLevelDomainStats";
+import Link from "./Link";
 
 interface TypeDomain {
   domain: string;
@@ -40,72 +41,24 @@ const staticColumns: ColumnDef<TypeDomain, any>[] = [
         )
         .sort((left, right) => (left.density - right.density) * -1);
 
-      return (
-        <table className="w-100">
-          <tbody>
-            {propertiesAndDensityArray.map(({property, density}) => (
-              <tr key={property}>
-                <td className="pr-4">
-                  <a
-                    className="underline"
-                    href={`https://schema.org/` + property}
-                  >
-                    {property}
-                  </a>
-                </td>
-                <td>{density.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
+      return propertiesAndDensityArray.map(({property, density}, propertyI) => (
+        <span key={property}>
+          <Link href={`https://schema.org/` + property}>{property}</Link>
+          &nbsp;(
+          {density.toLocaleString()})
+          {propertyI + 1 < propertiesAndDensityArray.length ? (
+            <span>&nbsp;&#183;&nbsp;</span>
+          ) : null}
+        </span>
+      ));
     },
     enableSorting: false,
     id: "properties",
-    header: () => "Properties | Density",
+    header: () => "Property (density)",
   }),
 ];
 
 export default function TypeDomainsTable({rows}: {rows: TypeDomain[]}) {
-  //   const columns = useMemo(() => {
-  //     const columns: ColumnDef<TypeDomain, any>[] = staticColumns.concat();
-
-  //     const uniquePropertyKeys: Set<string> = rows.reduce(
-  //       (set, row: TypeDomain) => {
-  //         for (const propertyKey of Object.keys(row.stats.propertiesAndDensity)) {
-  //           set.add(propertyKey);
-  //         }
-  //         return set;
-  //       },
-  //       new Set<string>()
-  //     );
-
-  //     for (const propertyKey of Array.from(uniquePropertyKeys).sort()) {
-  //       columns.push(
-  //         columnHelper.accessor(
-  //           (row) =>
-  //             row.stats.propertiesAndDensity[propertyKey] as number | undefined,
-  //           {
-  //             id: "property-" + propertyKey,
-  //             cell: ({row}) => {
-  //               const value: number | undefined = row.getValue(
-  //                 "property-" + propertyKey
-  //               );
-  //               if (typeof value !== "undefined") {
-  //                 return value.toLocaleString();
-  //               } else {
-  //                 return "";
-  //               }
-  //             },
-  //             header: "Property: " + propertyKey,
-  //           }
-  //         )
-  //       );
-  //     }
-
-  //     return columns;
-  //   }, [rows]);
-
   return (
     <Table
       columns={staticColumns}

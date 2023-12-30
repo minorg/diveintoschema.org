@@ -6,11 +6,7 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
 
   beforeAll(async () => {
     sut = (await new WebDataCommonsCorpus({}).classSpecificSubsets())[0];
-  });
-
-  it("gets the sample dataset", async () => {
-    const dataset = await sut.sampleDataset();
-    expect(dataset.size).toBeGreaterThan(0);
+    expect(sut.className).toBe("AdministrativeArea");
   });
 
   it("gets PLD stats", async () => {
@@ -23,8 +19,13 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
     }
   });
 
+  it("gets sample pages", async () => {
+    const samplePagesByIri = await sut.samplePagesByIri();
+    expect(Object.keys(samplePagesByIri)).toHaveLength(1);
+  });
+
   it(
-    "get all PLD stats in parallel",
+    "get all PLD stats files in parallel",
     async () => {
       await Promise.all(
         (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(
@@ -46,7 +47,7 @@ describe("WebDataCommonsCorpusClassSpecificSubset", () => {
   });
 
   it(
-    "get all sample datasets in parallel",
+    "get all sample files in parallel",
     async () => {
       await Promise.all(
         (await new WebDataCommonsCorpus({}).classSpecificSubsets()).map(

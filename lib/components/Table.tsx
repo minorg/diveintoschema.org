@@ -105,7 +105,7 @@ export default function Table<RowT>({
         </tbody>
       </table>
 
-      <div className="flex sm:flex-row flex-col w-full mt-8 items-center gap-2 text-xs">
+      <div className="flex sm:flex-row flex-col w-full mt-2 items-center gap-2 text-xs">
         <div className="sm:mr-auto sm:mb-0 mb-2">
           <span className="mr-2">Rows per page</span>
           <select
