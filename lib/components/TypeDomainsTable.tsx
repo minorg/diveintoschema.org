@@ -18,6 +18,7 @@ const columnHelper = createColumnHelper<TypeDomain>();
 const domainColumn: ColumnDef<TypeDomain, any> = columnHelper.accessor(
   "domain",
   {
+    filterFn: "includesString",
     header: () => "Domain",
   }
 );
@@ -28,6 +29,7 @@ const majesticMillionGlobalRankColumn: ColumnDef<TypeDomain, any> =
       context.getValue() !== null
         ? (context.getValue() as number).toLocaleString()
         : "",
+    enableColumnFilter: false,
     id: "stats.majesticMillionGlobalRank",
     header: () => "Majestic Million global rank",
     sortingFn: (rowA, rowB, columnId) => {
@@ -40,11 +42,13 @@ const majesticMillionGlobalRankColumn: ColumnDef<TypeDomain, any> =
 const webDataCommonsPldStatsColumns: ColumnDef<TypeDomain, any>[] = [
   columnHelper.accessor("stats.entitiesOfClass", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
+    enableColumnFilter: false,
     id: "stats.entitiesOfClass",
     header: () => "Found unique instances",
   }),
   columnHelper.accessor("stats.quadsOfSubset", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
+    enableColumnFilter: false,
     id: "stats.quadsOfSubset",
     header: () => "Found unique quads",
   }),
@@ -73,6 +77,11 @@ const webDataCommonsPldStatsColumns: ColumnDef<TypeDomain, any>[] = [
           ) : null}
         </span>
       ));
+    },
+    filterFn: (row, columnId, filterValue) => {
+      const propertiesAndDensityMap: Record<string, number> =
+        row.getValue(columnId);
+      return !!propertiesAndDensityMap[filterValue];
     },
     enableSorting: false,
     id: "properties",
