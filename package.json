@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@rdfjs/serializer-turtle": "^1.1.1",
     "@rdfjs/types": "^1.1.0",
     "@tanstack/react-table": "^8.11.2",
     "@tpluscode/rdf-ns-builders": "^4.3.0",

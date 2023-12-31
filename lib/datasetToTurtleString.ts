@@ -1,21 +1,10 @@
 import {DatasetCore} from "@rdfjs/types";
 import {schema} from "@tpluscode/rdf-ns-builders";
-import {Writer} from "n3";
+// @ts-expect-error No types
+import Serializer from "@rdfjs/serializer-turtle";
 
-export default async function datasetToTurtleString(
-  dataset: DatasetCore
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const writer = new Writer({prefixes: {"": schema[""].value}});
-    for (const quad of dataset) {
-      writer.addQuad(quad);
-    }
-    writer.end((error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+export default function datasetToTurtleString(dataset: DatasetCore): string {
+  const serializer = new Serializer();
+  serializer.options.prefixes = [["", schema[""]]];
+  return serializer.transform([...dataset]);
 }
