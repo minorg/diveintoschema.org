@@ -11,7 +11,7 @@ export default function Footer() {
       }}
     >
       <div className="mx-auto w-full max-w-screen-xl text-center">
-        © 2023 <Link href="https://minorgordon.net">Minor Gordon</Link>
+        © 2024 <Link href="https://minorgordon.net">Minor Gordon</Link>
         <br />
         Licensed under the&nbsp;
         <LicenseLink />
