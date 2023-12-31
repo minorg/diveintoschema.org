@@ -10,6 +10,7 @@ import path from "node:path";
 import {dataDirPath} from "@/lib/paths";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HttpClient from "@/lib/HttpClient";
+import WebDataCommonsRelatedClass from "./WebDataCommonsRelatedClass";
 
 // Utility functions
 const getChildTextNodes = (htmlElement: HTMLElement) =>
@@ -20,7 +21,9 @@ const getChildTextNodes = (htmlElement: HTMLElement) =>
 const parseGeneralStatsTextNode = (textNode: TextNode) =>
   parseInt(textNode.text.trim().split(" ", 2)[1].replaceAll(",", ""));
 
-const parseRelatedClassTextNode = (textNode: TextNode) => {
+const parseRelatedClassTextNode = (
+  textNode: TextNode
+): WebDataCommonsRelatedClass => {
   const [iri, count] = textNode.text.trim().split(" ", 2);
 
   let name: string;
@@ -35,6 +38,7 @@ const parseRelatedClassTextNode = (textNode: TextNode) => {
   return {
     count: parseInt(count.substring(1, count.length - 1).replaceAll(",", "")),
     name,
+    nameLowerCase: name.toLowerCase(),
   };
 };
 
