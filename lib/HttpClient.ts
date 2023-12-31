@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import zlib from "node:zlib";
 import invariant from "ts-invariant";
 import contentTypeParser from "content-type";
+import brotliDecompress from "./brotliDecompress";
 
 const brotliCompressText = (buffer: Buffer): Promise<Buffer> => {
   const brotliCompressParams: Record<number, number> = {};
@@ -21,18 +22,6 @@ const brotliCompressText = (buffer: Buffer): Promise<Buffer> => {
         }
       }
     );
-  });
-};
-
-const brotliDecompress = (buffer: Buffer): Promise<Buffer> => {
-  return new Promise((resolve, reject) => {
-    zlib.brotliDecompress(buffer, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
   });
 };
 

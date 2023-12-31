@@ -4,18 +4,40 @@ import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import WebDataCommonsClassPayLevelDomainStats from "../models/WebDataCommonsClassPayLevelDomainStats";
 import Link from "./Link";
+import {useMemo} from "react";
 
-interface TypeDomain {
+export interface TypeDomain {
   domain: string;
-  stats: Omit<WebDataCommonsClassPayLevelDomainStats, "domain">;
+  stats: Omit<WebDataCommonsClassPayLevelDomainStats, "domain"> & {
+    majesticMillionGlobalRank: number | null;
+  };
 }
 
 const columnHelper = createColumnHelper<TypeDomain>();
 
-const staticColumns: ColumnDef<TypeDomain, any>[] = [
-  columnHelper.accessor("domain", {
+const domainColumn: ColumnDef<TypeDomain, any> = columnHelper.accessor(
+  "domain",
+  {
     header: () => "Domain",
-  }),
+  }
+);
+
+const majesticMillionGlobalRankColumn: ColumnDef<TypeDomain, any> =
+  columnHelper.accessor("stats.majesticMillionGlobalRank", {
+    cell: (context) =>
+      context.getValue() !== null
+        ? (context.getValue() as number).toLocaleString()
+        : "",
+    id: "stats.majesticMillionGlobalRank",
+    header: () => "Majestic Million global rank",
+    sortingFn: (rowA, rowB, columnId) => {
+      const valueA: number = rowA.getValue(columnId) ?? Number.MAX_SAFE_INTEGER;
+      const valueB: number = rowB.getValue(columnId) ?? Number.MAX_SAFE_INTEGER;
+      return valueA - valueB;
+    },
+  });
+
+const webDataCommonsPldStatsColumns: ColumnDef<TypeDomain, any>[] = [
   columnHelper.accessor("stats.entitiesOfClass", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
     id: "stats.entitiesOfClass",
@@ -59,9 +81,18 @@ const staticColumns: ColumnDef<TypeDomain, any>[] = [
 ];
 
 export default function TypeDomainsTable({rows}: {rows: TypeDomain[]}) {
+  const columns = useMemo(() => {
+    const columns: ColumnDef<TypeDomain, any>[] = [domainColumn];
+    if (rows.some((row) => row.stats.majesticMillionGlobalRank !== null)) {
+      columns.push(majesticMillionGlobalRankColumn);
+    }
+    columns.push(...webDataCommonsPldStatsColumns);
+    return columns;
+  }, [rows]);
+
   return (
     <Table
-      columns={staticColumns}
+      columns={columns}
       initialState={{
         pagination: {pageSize: 5},
         sorting: [{desc: true, id: "stats.entitiesOfClass"}],
