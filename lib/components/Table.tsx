@@ -9,8 +9,11 @@ import {
   getPaginationRowModel,
   ColumnDef,
   TableOptions,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 import {useEffect, useState} from "react";
+import DebouncedInput from "./DebouncedInput";
 
 export default function Table<RowT>({
   columns,
@@ -29,6 +32,7 @@ export default function Table<RowT>({
   | "onSortingChange"
   | "state"
 >) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
@@ -49,10 +53,13 @@ export default function Table<RowT>({
       ...otherProps.initialState,
     },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     state: {
+      columnFilters,
       sorting,
     },
   });
@@ -66,23 +73,40 @@ export default function Table<RowT>({
               {headerGroup.headers.map((header) => (
                 <th key={header.id} className="p-4 font-medium text-left">
                   {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort()
-                          ? "cursor-pointer select-none flex min-w-[36px]"
-                          : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: <span className="pl-2">↑</span>,
-                        desc: <span className="pl-2">↓</span>,
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </div>
+                    <>
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none flex min-w-[36px]"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: <span className="pl-2">↑</span>,
+                          desc: <span className="pl-2">↓</span>,
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                      {header.column.getCanFilter() ? (
+                        <div className="mt-1">
+                          <DebouncedInput
+                            className="border p-1 rounded"
+                            onChange={(value) =>
+                              header.column.setFilterValue(value)
+                            }
+                            placeholder="Search"
+                            type="text"
+                            value={
+                              (header.column.getFilterValue() ?? "") as string
+                            }
+                          />
+                        </div>
+                      ) : null}
+                    </>
                   )}
                 </th>
               ))}

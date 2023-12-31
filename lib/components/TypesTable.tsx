@@ -32,14 +32,18 @@ const columns: ColumnDef<Type, any>[] = [
         {context.cell.getValue()}
       </Link>
     ),
+    enableColumnFilter: true,
+    filterFn: "includesString",
     header: () => "Type",
   }),
   columnHelper.accessor("generalStats.hosts", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
+    enableColumnFilter: false,
     header: () => "Found on unique hosts",
   }),
   columnHelper.accessor("generalStats.urls", {
     cell: (context) => (context.getValue() as number).toLocaleString(),
+    enableColumnFilter: false,
     header: () => "Found on unique URLs",
   }),
   columnHelper.accessor("relatedTypes", {
@@ -72,6 +76,13 @@ const columns: ColumnDef<Type, any>[] = [
       </table>
     ),
     enableSorting: false,
+    filterFn: (row, columnId, filterValue) => {
+      const value = row.getValue(columnId) as WebDataCommonsRelatedClass[];
+      const filterValueLowerCase: string = filterValue.toString().toLowerCase();
+      return value.some((relatedClass) =>
+        relatedClass.nameLowerCase.includes(filterValueLowerCase)
+      );
+    },
     id: "relatedTypes",
     header: () => "Related types",
   }),

@@ -51,7 +51,7 @@ export default class WebDataCommonsCorpusClassSpecificSubset {
     };
     httpClient: HttpClient;
     pldStatsHref: string;
-    relatedClasses: readonly {count: number; name: string}[];
+    relatedClasses: readonly WebDataCommonsRelatedClass[];
     sampleDownloadHref: string;
     size: string;
   }) {
