@@ -4,6 +4,7 @@ import JsonLdSyntaxHighlighter from "@/lib/components/JsonLdSyntaxHighlighter";
 import Link from "@/lib/components/Link";
 import MainLayout from "@/lib/components/MainLayout";
 import datasetToJsonLdString from "@/lib/datasetToJsonLdString";
+import slugify from "@/lib/slugify";
 import {DatasetCore} from "@rdfjs/types";
 import {rdf, schema} from "@tpluscode/rdf-ns-builders";
 import {DataFactory, Store} from "n3";
@@ -105,9 +106,52 @@ export default async function RootPage() {
             </ul>
           </div>
         </div>
-        <div className="text-black text-center text-2xl">
-          Ready to dive in? Try{" "}
-          <Link href={Hrefs.types}>browsing the list of types</Link>.
+        <div className=" flex flex-col gap-2 text-black text-center text-2xl">
+          <p>Ready to dive in?</p>
+          <p>
+            Try <Link href={Hrefs.types}>browsing the list of types</Link>, or
+          </p>
+          <div>
+            Check out these examples:
+            <ul>
+              <li>
+                <Link
+                  href={Hrefs.typeSamplePage({
+                    samplePageIriSlug: slugify(
+                      "http://www.hotelwytheville.com/things-to-do"
+                    ),
+                    typeName: "Hotel",
+                  })}
+                >
+                  Hotel
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={Hrefs.typeSamplePage({
+                    samplePageIriSlug: slugify(
+                      "https://barr-nunntruckingjobs.com/team-over-the-road-truck-driving-job-11-day-fleet.asp"
+                    ),
+                    typeName: "JobPosting",
+                  })}
+                >
+                  JobPosting
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={Hrefs.typeSamplePage({
+                    samplePageIriSlug: slugify(
+                      "https://1776steakhouse.com/menuitems/surf-and-turf-burger/"
+                    ),
+                    typeName: "Restaurant",
+                  })}
+                >
+                  Restaurant
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </MainLayout>
