@@ -43,11 +43,11 @@ export default async function AboutPage() {
   });
 
   return (
-    <div className="flex flex-col px-4 gap-4 md:gap-8">
+    <div className="flex flex-col px-4 gap-4">
       <div className="flex flex-row justify-center text-lg md:text-xl lg:text-2xl">
         About Dive Into Schema.org
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row gap-4">
         <div className="flex flex-col flex-grow px-4 gap-4 md:gap-8 md:text-lg lg:text-lg">
           <p>
             Schema.org types are well-documented on schema.org itself, and there
@@ -57,9 +57,10 @@ export default async function AboutPage() {
           <p>
             Studying advanced examples of structured data &quot;in the
             wild&quot; is more challenging. I developed Dive Into Schema.org to
-            fill the gap between start-from-zero tutorials and the weeds of raw
-            [RDF](https://www.w3.org/RDF/). There is a need for unbiased
-            information, presented well.
+            fill the gap between start-from-zero tutorials and the weeds of
+            raw&nbsp;
+            <Link href="https://www.w3.org/RDF/">RDF</Link>. There is a need for
+            unbiased information, presented well.
           </p>
           <p>
             I&apos;ve needed a reference like Dive Into Schema.org in several of
