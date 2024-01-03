@@ -56,7 +56,11 @@ export default async function TypePage({
       ]}
     >
       <div className="flex flex-col gap-8">
-        <Link href={`https://schema.org/{name}`}>Schema.org documentation</Link>
+        <div>
+          <Link href={`https://schema.org/${typeName}`}>
+            Schema.org documentation
+          </Link>
+        </div>
         <div>
           <div className="font-bold">General statistics</div>
           <div className="ml-2 mt-2">

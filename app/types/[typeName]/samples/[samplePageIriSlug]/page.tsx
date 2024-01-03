@@ -3,6 +3,7 @@ import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
 import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
 import DatasetSyntaxHighlighters from "@/lib/components/DatasetSyntaxHighlighters";
+import Link from "@/lib/components/Link";
 import datasetToStrings from "@/lib/datasetToStrings";
 import WebDataCommonsCorpusPageSubset from "@/lib/models/WebDataCommonsCorpusPageSubset";
 import slugify from "@/lib/slugify";
@@ -56,9 +57,34 @@ export default async function TypeSamplePage({
         },
       ]}
     >
-      <DatasetSyntaxHighlighters
-        dataset={await datasetToStrings(samplePage.dataset)}
-      />
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <div>
+            <Link href={samplePage.pageIri.value}>Source page</Link>
+          </div>
+          <div>
+            <Link
+              href={`https://validator.schema.org/#url=${encodeURIComponent(
+                samplePage.pageIri.value
+              )}`}
+            >
+              Schema.org Schema Markup Validator
+            </Link>
+          </div>
+          <div>
+            <Link
+              href={`https://search.google.com/test/rich-results?url=${encodeURIComponent(
+                samplePage.pageIri.value
+              )}`}
+            >
+              Google Rich Results Test
+            </Link>
+          </div>
+        </div>
+        <DatasetSyntaxHighlighters
+          dataset={await datasetToStrings(samplePage.dataset)}
+        />
+      </div>
     </BreadcrumbsLayout>
   );
 }
