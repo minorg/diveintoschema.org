@@ -43,12 +43,12 @@ export default async function AboutPage() {
   });
 
   return (
-    <div className="flex flex-col px-4 gap-4 md:gap-8 md:text-lg lg:text-xl">
+    <div className="flex flex-col px-4 gap-4 md:gap-8">
       <div className="flex flex-row justify-center text-lg md:text-xl lg:text-2xl">
         About Dive Into Schema.org
       </div>
       <div className="flex flex-row">
-        <div className="flex flex-col flex-grow px-4 gap-4 md:gap-8 md:text-lg lg:text-xl">
+        <div className="flex flex-col flex-grow px-4 gap-4 md:gap-8 md:text-lg lg:text-lg">
           <p>
             Schema.org types are well-documented on schema.org itself, and there
             are plenty of basic examples of good markup there and in tutorials
