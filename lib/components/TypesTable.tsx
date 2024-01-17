@@ -1,17 +1,19 @@
 "use client";
 
 import Hrefs from "@/lib/Hrefs";
-import WebDataCommonsClassGeneralStats from "@/lib/models/WebDataCommonsClassGeneralStats";
-import WebDataCommonsRelatedClass from "@/lib/models/WebDataCommonsRelatedClass";
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import Link from "./Link";
 import {Table as TableModel} from "@tanstack/react-table";
+import {
+  SchemaDotOrgClassGeneralStats,
+  SchemaDotOrgRelatedClass,
+} from "webdatacommons";
 
 interface Type {
   name: string;
-  generalStats: WebDataCommonsClassGeneralStats;
-  relatedTypes: readonly WebDataCommonsRelatedClass[];
+  generalStats: SchemaDotOrgClassGeneralStats;
+  relatedTypes: readonly SchemaDotOrgRelatedClass[];
 }
 
 const columnHelper = createColumnHelper<Type>();
@@ -56,7 +58,7 @@ const columns: ColumnDef<Type, any>[] = [
           </tr>
         </thead>
         <tbody>
-          {(context.getValue() as WebDataCommonsRelatedClass[])
+          {(context.getValue() as SchemaDotOrgRelatedClass[])
             .sort((left, right) => (left.count - right.count) * -1)
             .map((relatedType) => (
               <tr key={relatedType.name}>
@@ -77,7 +79,7 @@ const columns: ColumnDef<Type, any>[] = [
     ),
     enableSorting: false,
     filterFn: (row, columnId, filterValue) => {
-      const value = row.getValue(columnId) as WebDataCommonsRelatedClass[];
+      const value = row.getValue(columnId) as SchemaDotOrgRelatedClass[];
       const filterValueLowerCase: string = filterValue.toString().toLowerCase();
       return value.some((relatedClass) =>
         relatedClass.nameLowerCase.includes(filterValueLowerCase)

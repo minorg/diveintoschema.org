@@ -2,13 +2,13 @@
 
 import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
-import WebDataCommonsClassPayLevelDomainStats from "../models/WebDataCommonsClassPayLevelDomainStats";
 import Link from "./Link";
 import {useMemo} from "react";
+import {SchemaDotOrgClassPayLevelDomainStats} from "webdatacommons";
 
 export interface TypeDomain {
   domain: string;
-  stats: Omit<WebDataCommonsClassPayLevelDomainStats, "domain"> & {
+  stats: Omit<SchemaDotOrgClassPayLevelDomainStats, "domain"> & {
     majesticMillionGlobalRank: number | null;
   };
 }

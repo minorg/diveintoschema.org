@@ -1,7 +1,7 @@
-import WebDataCommonsClassGeneralStats from "../models/WebDataCommonsClassGeneralStats";
+import {SchemaDotOrgClassGeneralStats} from "webdatacommons";
 
 export default function TypeGeneralStatsTable(
-  generalStats: WebDataCommonsClassGeneralStats
+  generalStats: SchemaDotOrgClassGeneralStats
 ) {
   return (
     <table>
