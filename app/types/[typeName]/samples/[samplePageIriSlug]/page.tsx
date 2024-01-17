@@ -1,14 +1,14 @@
-import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import schemaDotOrgDataSet from "@/app/schemaDotOrgDataSet";
 import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
 import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
 import DatasetSyntaxHighlighters from "@/lib/components/DatasetSyntaxHighlighters";
 import Link from "@/lib/components/Link";
 import datasetToStrings from "@/lib/datasetToStrings";
-import WebDataCommonsCorpusPageSubset from "@/lib/models/WebDataCommonsCorpusPageSubset";
 import slugify from "@/lib/slugify";
 import {Metadata} from "next";
 import invariant from "ts-invariant";
+import {SchemaDotOrgDataSetPageSubset} from "webdatacommons";
 
 interface TypeSamplePageParams {
   samplePageIriSlug: string;
@@ -18,14 +18,16 @@ interface TypeSamplePageParams {
 async function getSamplePage({
   samplePageIriSlug,
   typeName,
-}: TypeSamplePageParams): Promise<WebDataCommonsCorpusPageSubset> {
+}: TypeSamplePageParams): Promise<SchemaDotOrgDataSetPageSubset> {
   const classSpecificSubset = (
-    await webDataCommonsCorpus.classSpecificSubsetsByClassName()
+    await schemaDotOrgDataSet.classSpecificSubsetsByClassName()
   )[typeName];
   invariant(classSpecificSubset, typeName);
-  const samplePage = (await classSpecificSubset.samplePagesByIriSlug())[
-    samplePageIriSlug
-  ];
+  const samplePage = Object.values(
+    await classSpecificSubset.samplePagesByIri()
+  ).find(
+    (samplePage) => slugify(samplePage.pageIri.value) === samplePageIriSlug
+  );
   invariant(samplePage, samplePageIriSlug);
   return samplePage;
 }
@@ -104,7 +106,7 @@ export async function generateMetadata({
 export async function generateStaticParams(): Promise<TypeSamplePageParams[]> {
   const params = (
     await Promise.all(
-      (await webDataCommonsCorpus.classSpecificSubsets()).map(
+      (await schemaDotOrgDataSet.classSpecificSubsets()).map(
         (classSpecificSubset) =>
           classSpecificSubset.samplePagesByIri().then((samplePagesByIri) =>
             Object.values(samplePagesByIri).map((samplePage) => ({

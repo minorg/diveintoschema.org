@@ -1,5 +1,5 @@
 import PageMetadata from "@/lib/PageMetadata";
-import webDataCommonsCorpus from "../webDataCommonsCorpus";
+import schemaDotOrgDataSet from "../schemaDotOrgDataSet";
 import TypesTable from "@/lib/components/TypesTable";
 import Hrefs from "@/lib/Hrefs";
 import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
@@ -17,7 +17,7 @@ export default async function TypesPage() {
       ]}
     >
       <TypesTable
-        rows={(await webDataCommonsCorpus.classSpecificSubsets()).map(
+        rows={(await schemaDotOrgDataSet.classSpecificSubsets()).map(
           (classSpecificSubset) => ({
             generalStats: classSpecificSubset.generalStats,
             name: classSpecificSubset.className,

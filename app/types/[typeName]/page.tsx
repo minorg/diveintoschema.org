@@ -1,5 +1,5 @@
 import majesticMillionReport from "@/app/majesticMillionReport";
-import webDataCommonsCorpus from "@/app/webDataCommonsCorpus";
+import schemaDotOrgDataSet from "@/app/schemaDotOrgDataSet";
 import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
 import BreadcrumbsLayout from "@/lib/components/BreadcrumbsLayout";
@@ -19,7 +19,7 @@ export default async function TypePage({
   params: TypePageParams;
 }) {
   const classSpecificSubset = (
-    await webDataCommonsCorpus.classSpecificSubsetsByClassName()
+    await schemaDotOrgDataSet.classSpecificSubsetsByClassName()
   )[typeName];
 
   const generalStats = classSpecificSubset.generalStats;
@@ -106,7 +106,7 @@ export function generateMetadata({params}: {params: TypePageParams}): Metadata {
 }
 
 export async function generateStaticParams(): Promise<TypePageParams[]> {
-  return (await webDataCommonsCorpus.classSpecificSubsets()).map(
+  return (await schemaDotOrgDataSet.classSpecificSubsets()).map(
     (classSpecificSubset) => ({
       typeName: classSpecificSubset.className,
     })

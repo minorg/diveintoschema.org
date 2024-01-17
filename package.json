@@ -8,13 +8,9 @@
     "@tanstack/react-table": "^8.11.2",
     "@tpluscode/rdf-ns-builders": "^4.3.0",
     "content-type": "^1.0.5",
-    "got": "^14.0.0",
-    "json-stringify-deterministic": "^1.0.12",
     "jsonld": "^8.3.2",
     "n3": "^1.17.2",
     "next": "14.0.4",
-    "node-html-parser": "^6.1.11",
-    "papaparse": "^5.4.1",
     "pino": "^8.17.1",
     "react": "^18",
     "react-dom": "^18",
@@ -23,12 +19,12 @@
     "runtypes": "^6.7.0",
     "ts-invariant": "^0.10.3",
     "typescript-memoize": "^1.1.1",
-    "url-slug": "^4.0.1"
+    "url-slug": "^4.0.1",
+    "webdatacommons": "1.0.1"
   },
   "devDependencies": {
     "@types/content-type": "^1.1.8",
     "@types/jest": "29.5.11",
-    "@types/json-buffer": "^3.0.2",
     "@types/jsonld": "^1.5.13",
     "@types/n3": "^1.16.4",
     "@types/node": "^20",
