@@ -5177,10 +5177,10 @@ web-streams-polyfill@^3.0.3:
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz#71c2718c52b45fd49dbeee88634b3a60ceab42a6"
   integrity sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==
 
-webdatacommons@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/webdatacommons/-/webdatacommons-3.0.4.tgz#12df51e5de6cdfabee1d0d859a46014890fea17d"
-  integrity sha512-9qZ9l4+RdHGs7dgX45P10tzMqrqNh/udIaXZ6jW+twqeihkwc2MdBoJ6C3iBvEXKNbxDdzY4StIL8QB9lS9dPQ==
+webdatacommons@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/webdatacommons/-/webdatacommons-3.0.5.tgz#8d2a333dedc3fbd3f37aff7f1adcb89f9d0dd3fd"
+  integrity sha512-7LciYBxSRWjpSMnFdfSshxGDzmlXdcRCeie/5F79JO0G8pFNYpeU5BETeDHEn0KPY/SC3fMnau8np9Y/RK+Fmg==
   dependencies:
     "@rdfjs/types" "^1.1.0"
     "@types/cli-progress" "^3.11.5"
