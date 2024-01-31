@@ -18,29 +18,29 @@ export default async function TypePage({
 }: {
   params: TypePageParams;
 }) {
-  const classSpecificSubset = (
-    await schemaDotOrgDataSet.classSpecificSubsetsByClassName()
-  )[typeName];
+  const classSubset = (await schemaDotOrgDataSet.classSubsetsByClassName())[
+    typeName
+  ];
 
-  const generalStats = classSpecificSubset.generalStats;
+  const generalStats = classSubset.generalStats;
 
   const domains: TypeDomain[] = [];
-  for (const pldStats of await classSpecificSubset.pldStats()) {
+  for (const payLevelDomainSubset of await classSubset.payLevelDomainSubsets()) {
     domains.push({
-      domain: pldStats.domain,
+      domain: payLevelDomainSubset.domain,
       stats: {
-        entitiesOfClass: pldStats.entitiesOfClass,
+        entitiesOfClass: payLevelDomainSubset.stats.entitiesOfClass,
         majesticMillionGlobalRank:
-          await majesticMillionReport.getDomainGlobalRank(pldStats.domain),
-        propertiesAndDensity: pldStats.propertiesAndDensity,
-        quadsOfSubset: pldStats.quadsOfSubset,
+          await majesticMillionReport.getDomainGlobalRank(
+            payLevelDomainSubset.domain
+          ),
+        propertiesAndDensity: payLevelDomainSubset.stats.propertiesAndDensity,
+        quadsOfSubset: payLevelDomainSubset.stats.quadsOfSubset,
       },
     });
   }
 
-  const samplePages = Object.values(
-    await classSpecificSubset.samplePagesByIri()
-  );
+  const samplePages = await classSubset.samplePages();
 
   return (
     <BreadcrumbsLayout
@@ -106,9 +106,7 @@ export function generateMetadata({params}: {params: TypePageParams}): Metadata {
 }
 
 export async function generateStaticParams(): Promise<TypePageParams[]> {
-  return (await schemaDotOrgDataSet.classSpecificSubsets()).map(
-    (classSpecificSubset) => ({
-      typeName: classSpecificSubset.className,
-    })
-  );
+  return (await schemaDotOrgDataSet.classSubsets()).map((classSubset) => ({
+    typeName: classSubset.className,
+  }));
 }

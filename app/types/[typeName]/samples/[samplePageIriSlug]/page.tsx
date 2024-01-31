@@ -8,7 +8,7 @@ import datasetToStrings from "@/lib/datasetToStrings";
 import slugify from "@/lib/slugify";
 import {Metadata} from "next";
 import invariant from "ts-invariant";
-import {SchemaDotOrgDataSetPageSubset} from "webdatacommons";
+import {SchemaDotOrgDataSet} from "webdatacommons";
 
 interface TypeSamplePageParams {
   samplePageIriSlug: string;
@@ -18,14 +18,12 @@ interface TypeSamplePageParams {
 async function getSamplePage({
   samplePageIriSlug,
   typeName,
-}: TypeSamplePageParams): Promise<SchemaDotOrgDataSetPageSubset> {
-  const classSpecificSubset = (
-    await schemaDotOrgDataSet.classSpecificSubsetsByClassName()
-  )[typeName];
-  invariant(classSpecificSubset, typeName);
-  const samplePage = Object.values(
-    await classSpecificSubset.samplePagesByIri()
-  ).find(
+}: TypeSamplePageParams): Promise<SchemaDotOrgDataSet.ClassSubset.PageSubset> {
+  const classSubset = (await schemaDotOrgDataSet.classSubsetsByClassName())[
+    typeName
+  ];
+  invariant(classSubset, typeName);
+  const samplePage = (await classSubset.samplePages()).find(
     (samplePage) => slugify(samplePage.pageIri.value) === samplePageIriSlug
   );
   invariant(samplePage, samplePageIriSlug);
@@ -106,14 +104,13 @@ export async function generateMetadata({
 export async function generateStaticParams(): Promise<TypeSamplePageParams[]> {
   const params = (
     await Promise.all(
-      (await schemaDotOrgDataSet.classSpecificSubsets()).map(
-        (classSpecificSubset) =>
-          classSpecificSubset.samplePagesByIri().then((samplePagesByIri) =>
-            Object.values(samplePagesByIri).map((samplePage) => ({
-              samplePageIriSlug: slugify(samplePage.pageIri.value),
-              typeName: classSpecificSubset.className,
-            }))
-          )
+      (await schemaDotOrgDataSet.classSubsets()).map((classSubset) =>
+        classSubset.samplePages().then((samplePages) =>
+          samplePages.map((samplePage) => ({
+            samplePageIriSlug: slugify(samplePage.pageIri.value),
+            typeName: classSubset.className,
+          }))
+        )
       )
     )
   ).flat();

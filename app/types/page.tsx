@@ -17,13 +17,11 @@ export default async function TypesPage() {
       ]}
     >
       <TypesTable
-        rows={(await schemaDotOrgDataSet.classSpecificSubsets()).map(
-          (classSpecificSubset) => ({
-            generalStats: classSpecificSubset.generalStats,
-            name: classSpecificSubset.className,
-            relatedTypes: classSpecificSubset.relatedClasses,
-          })
-        )}
+        rows={(await schemaDotOrgDataSet.classSubsets()).map((classSubset) => ({
+          generalStats: classSubset.generalStats,
+          name: classSubset.className,
+          relatedTypes: classSubset.relatedClasses,
+        }))}
       />
     </BreadcrumbsLayout>
   );

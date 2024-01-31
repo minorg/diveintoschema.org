@@ -5,15 +5,12 @@ import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import Link from "./Link";
 import {Table as TableModel} from "@tanstack/react-table";
-import {
-  SchemaDotOrgClassGeneralStats,
-  SchemaDotOrgRelatedClass,
-} from "webdatacommons";
+import {SchemaDotOrgDataSet} from "webdatacommons";
 
 interface Type {
   name: string;
-  generalStats: SchemaDotOrgClassGeneralStats;
-  relatedTypes: readonly SchemaDotOrgRelatedClass[];
+  generalStats: SchemaDotOrgDataSet.ClassSubset.GeneralStats;
+  relatedTypes: readonly SchemaDotOrgDataSet.ClassSubset.RelatedClass[];
 }
 
 const columnHelper = createColumnHelper<Type>();
@@ -58,7 +55,9 @@ const columns: ColumnDef<Type, any>[] = [
           </tr>
         </thead>
         <tbody>
-          {(context.getValue() as SchemaDotOrgRelatedClass[])
+          {(
+            context.getValue() as SchemaDotOrgDataSet.ClassSubset.RelatedClass[]
+          )
             .sort((left, right) => (left.count - right.count) * -1)
             .map((relatedType) => (
               <tr key={relatedType.name}>
@@ -79,7 +78,9 @@ const columns: ColumnDef<Type, any>[] = [
     ),
     enableSorting: false,
     filterFn: (row, columnId, filterValue) => {
-      const value = row.getValue(columnId) as SchemaDotOrgRelatedClass[];
+      const value = row.getValue(
+        columnId
+      ) as SchemaDotOrgDataSet.ClassSubset.RelatedClass[];
       const filterValueLowerCase: string = filterValue.toString().toLowerCase();
       return value.some((relatedClass) =>
         relatedClass.nameLowerCase.includes(filterValueLowerCase)

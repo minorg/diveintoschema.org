@@ -4,11 +4,14 @@ import Table from "./Table";
 import {createColumnHelper, ColumnDef} from "@tanstack/react-table";
 import Link from "./Link";
 import {useMemo} from "react";
-import {SchemaDotOrgClassPayLevelDomainStats} from "webdatacommons";
+import {SchemaDotOrgDataSet} from "webdatacommons";
 
 export interface TypeDomain {
   domain: string;
-  stats: Omit<SchemaDotOrgClassPayLevelDomainStats, "domain"> & {
+  stats: Omit<
+    SchemaDotOrgDataSet.ClassSubset.PayLevelDomainSubset.Stats,
+    "domain"
+  > & {
     majesticMillionGlobalRank: number | null;
   };
 }

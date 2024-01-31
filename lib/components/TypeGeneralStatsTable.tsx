@@ -1,7 +1,7 @@
-import {SchemaDotOrgClassGeneralStats} from "webdatacommons";
+import {SchemaDotOrgDataSet} from "webdatacommons";
 
 export default function TypeGeneralStatsTable(
-  generalStats: SchemaDotOrgClassGeneralStats
+  generalStats: SchemaDotOrgDataSet.ClassSubset.GeneralStats
 ) {
   return (
     <table>

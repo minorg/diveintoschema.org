@@ -20,7 +20,7 @@
     "ts-invariant": "^0.10.3",
     "typescript-memoize": "^1.1.1",
     "url-slug": "^4.0.1",
-    "webdatacommons": "1.0.1"
+    "webdatacommons": "3.0.3"
   },
   "devDependencies": {
     "@types/content-type": "^1.1.8",
