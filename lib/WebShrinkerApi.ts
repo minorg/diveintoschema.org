@@ -40,7 +40,7 @@ export default class WebShrinkerApi {
       cacheDirectoryPath: path.resolve(
         dataDirPath,
         "webshrinker",
-        "http-cache"
+        "http-client"
       ),
     });
   }
