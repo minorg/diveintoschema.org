@@ -89,10 +89,6 @@ export default async function AboutPage() {
           <p>
             Original content on this site is licensed under the <LicenseLink />.
           </p>
-          <p>
-            Comments or questions about the site?{" "}
-            <Link href={Hrefs.contact}>Contact me</Link>.
-          </p>
         </div>
         <div className="hidden xl:block justify-center md:text-lg lg:text-xl">
           <JsonLdSyntaxHighlighter jsonLdString={selfDatasetJsonLdString} />
