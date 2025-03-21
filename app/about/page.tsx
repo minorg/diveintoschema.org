@@ -1,4 +1,3 @@
-import Hrefs from "@/lib/Hrefs";
 import PageMetadata from "@/lib/PageMetadata";
 import JsonLdSyntaxHighlighter from "@/lib/components/JsonLdSyntaxHighlighter";
 import LicenseLink from "@/lib/components/LicenseLink";
