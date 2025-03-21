@@ -1,6 +1,6 @@
 export default class Hrefs {
   static get about() {
-    return "/about";
+    return `${Hrefs.root}/about`;
   }
 
   static get contact() {
@@ -8,11 +8,11 @@ export default class Hrefs {
   }
 
   static get root() {
-    return "/";
+    return "/diveintoschema.org/";
   }
 
   static type({name}: {name: string}) {
-    return Hrefs.types + "/" + name;
+    return `${Hrefs.types}/${name}`;
   }
 
   static typeSamplePage({
@@ -26,6 +26,6 @@ export default class Hrefs {
   }
 
   static get types() {
-    return "/types";
+    return `${Hrefs.root}types`;
   }
 }
